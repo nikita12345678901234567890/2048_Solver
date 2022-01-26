@@ -20,8 +20,6 @@ namespace GameLibrary
 
     public class Class1
     {
-        int gridWidth;
-        int gridHeight;
         public int[,] grid { get; private set; }
 
         Random random = new Random();
@@ -42,12 +40,35 @@ namespace GameLibrary
         public void Move(Direction direction)
         {
             //Rotate the board so the move is up:
+            switch (direction)
+            {
+                case Direction.Up:
+                    //Literally nothing
+                    break;
 
+                case Direction.Down:
+                    //Rotate 108*
+                    grid = ReverseRows(grid);
+                    grid = ReverseColumns(grid);
+                    break;
+
+                case Direction.Left:
+                    //Rotate 90* clockwise
+                    grid = Transpose(grid);
+                    grid = ReverseRows(grid);
+                    break;
+
+                case Direction.Right:
+                    //Rotate 90* counterclockwise
+                    grid = Transpose(grid);
+                    grid = ReverseColumns(grid);
+                    break;
+            }
 
             //Do the move:
-            for (int y = 0; y < gridHeight - 1; y++)
+            for (int y = 0; y < grid.GetLength(1) - 1; y++)
             {
-                for (int x = 0; x < gridWidth; x++)
+                for (int x = 0; x < grid.GetLength(0); x++)
                 {
                     if (grid[y, x] == grid[y + 1, x])
                     {
@@ -57,7 +78,78 @@ namespace GameLibrary
             }
 
             //Rotate the board back:
+            switch (direction)
+            {
+                case Direction.Up:
+                    //Literally nothing
+                    break;
 
+                case Direction.Down:
+                    //Rotate 108*
+                    grid = ReverseRows(grid);
+                    grid = ReverseColumns(grid);
+                    break;
+
+                case Direction.Left:
+                    //Rotate 90* counterclockwise
+                    grid = Transpose(grid);
+                    grid = ReverseColumns(grid);
+                    break;
+
+                case Direction.Right:
+                    //Rotate 90* clockwise
+                    grid = Transpose(grid);
+                    grid = ReverseRows(grid);
+                    break;
+            }
+
+            //Spawn a tile:
+            SpawnTile();
+        }
+
+        private int[,] Transpose(int[,] grid)
+        {
+            int[,] result = new int[grid.GetLength(1), grid.GetLength(0)];
+
+            for (int y = 0; y < grid.GetLength(0); y++)
+            {
+                for (int x = 0; x < grid.GetLength(1); x++)
+                {
+                    result[x, y] = grid[y, x];
+                }
+            }
+
+            return result;
+        }
+
+        private int[,] ReverseRows(int[,] grid)
+        {
+            int[,] result = new int[grid.GetLength(0), grid.GetLength(1)];
+
+            for (int y = 0; y < grid.GetLength(0); y++)
+            {
+                for (int x = 0; x < grid.GetLength(1); x++)
+                {
+                    result[y, grid.GetLength(1) - x] = grid[y, x];
+                }
+            }
+
+            return result;
+        }
+
+        private int[,] ReverseColumns(int[,] grid)
+        {
+            int[,] result = new int[grid.GetLength(0), grid.GetLength(1)];
+
+            for (int y = 0; y < grid.GetLength(0); y++)
+            {
+                for (int x = 0; x < grid.GetLength(1); x++)
+                {
+                    result[grid.GetLength(0) - y, x] = grid[y, x];
+                }
+            }
+
+            return result;
         }
 
         private void Combine(Point topTile, Point bottomTile)
@@ -74,9 +166,9 @@ namespace GameLibrary
             List<Point> availableSpaces = new List<Point>();
 
             //Getting all of the available spots:
-            for (int y = 0; y < gridHeight; y++)
+            for (int y = 0; y < grid.GetLength(1); y++)
             {
-                for (int x = 0; x < gridWidth; x++)
+                for (int x = 0; x < grid.GetLength(0); x++)
                 {
                     if (grid[y, x] == 0)
                     {
