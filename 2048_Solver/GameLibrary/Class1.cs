@@ -70,7 +70,11 @@ namespace GameLibrary
             {
                 for (int x = 0; x < grid.GetLength(0); x++)
                 {
-                    if (grid[y, x] == grid[y + 1, x])
+                    if (grid[y, x] == 0)
+                    {
+                        grid[y, x] = grid[y + 1, x];
+                    }
+                    else if (grid[y, x] == grid[y + 1, x])
                     {
                         Combine(new Point(x, y), new Point(x, y + 1));
                     }
@@ -130,7 +134,7 @@ namespace GameLibrary
             {
                 for (int x = 0; x < grid.GetLength(1); x++)
                 {
-                    result[y, grid.GetLength(1) - x] = grid[y, x];
+                    result[y, (grid.GetLength(1) - 1) - x] = grid[y, x];
                 }
             }
 
@@ -145,7 +149,7 @@ namespace GameLibrary
             {
                 for (int x = 0; x < grid.GetLength(1); x++)
                 {
-                    result[grid.GetLength(0) - y, x] = grid[y, x];
+                    result[(grid.GetLength(0) - 1) - y, x] = grid[y, x];
                 }
             }
 
@@ -175,6 +179,11 @@ namespace GameLibrary
                         availableSpaces.Add(new Point(x, y));
                     }
                 }
+            }
+
+            if (availableSpaces.Count == 0)
+            {
+                return;
             }
 
             //Getting a random number:
