@@ -19,6 +19,7 @@ namespace _2048_Solver
         Class1 game;
 
         Texture2D tile;
+        SpriteFont font;
 
         Dictionary<int, Color> squareColors;
 
@@ -60,6 +61,7 @@ namespace _2048_Solver
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             tile = Content.Load<Texture2D>("Tile");
+            font = Content.Load<SpriteFont>("Font");
         }
 
         protected override void UnloadContent()
@@ -109,6 +111,7 @@ namespace _2048_Solver
                     if(game.grid[y, x] != 0)
                     {
                         spriteBatch.Draw(tile, position: new Vector2(x * tile.Width, y * tile.Height) * scale, color: squareColors[game.grid[y, x]], scale: Vector2.One * scale);
+                        spriteBatch.DrawString(font, game.grid[y, x].ToString(), new Vector2((x * tile.Width) + tile.Width / 2, (y * tile.Height) + tile.Height / 2) * scale, Color.Black);
                     }
                 }
             }
