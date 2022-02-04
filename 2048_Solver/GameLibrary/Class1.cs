@@ -73,11 +73,11 @@ namespace GameLibrary
             int[,] squishedGrid = new int[grid.GetLength(0), grid.GetLength(1)];
 
             //Squish all of the tiles to the left:
-            for (int y = 0; y < grid.GetLength(1) - 1; y++)
+            for (int y = 0; y < grid.GetLength(0); y++)
             {
-                for (int x = 0, i = 0; x < grid.GetLength(0); x++, i++)
+                for (int x = 0, i = 0; x < grid.GetLength(1); x++, i++)
                 {
-                    while (x < grid.GetLength(0) - 1 && grid[y, x] == 0)
+                    while (x < grid.GetLength(1) - 1 && grid[y, x] == 0)
                     {
                         x++;
                     }
@@ -87,9 +87,9 @@ namespace GameLibrary
             grid = squishedGrid;
 
             //Do the combining:
-            for (int y = 0; y < grid.GetLength(1); y++)
+            for (int y = 0; y < grid.GetLength(0); y++)
             {
-                for (int x = 1; x < grid.GetLength(0); x++)
+                for (int x = 1; x < grid.GetLength(1); x++)
                 {
                     if (grid[y, x] == grid[y, x - 1] && grid[y, x] != 0)
                     {
@@ -97,13 +97,13 @@ namespace GameLibrary
                     }
                 }
             }
-            
+
             //Squish them again:
-            for (int y = 0; y < grid.GetLength(1) - 1; y++)
+            for (int y = 0; y < grid.GetLength(0); y++)
             {
-                for (int x = 0, i = 0; x < grid.GetLength(0); x++, i++)
+                for (int x = 0, i = 0; x < grid.GetLength(1); x++, i++)
                 {
-                    while (x < grid.GetLength(0) - 1 && grid[y, x] == 0)
+                    while (x < grid.GetLength(1) - 1 && grid[y, x] == 0)
                     {
                         x++;
                     }
@@ -139,7 +139,7 @@ namespace GameLibrary
             }
 
             //Spawn a tile:
-            //SpawnTile();
+            SpawnTile();
         }
 
         private int[,] Transpose(int[,] grid)

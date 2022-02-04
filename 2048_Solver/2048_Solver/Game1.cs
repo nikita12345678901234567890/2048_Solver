@@ -3,6 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using GameLibrary;
 using System.Collections.Generic;
+using sel = OpenQA.Selenium;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace _2048_Solver
 {
@@ -29,6 +33,7 @@ namespace _2048_Solver
             Content.RootDirectory = "Content";
 
             IsMouseVisible = true;
+
         }
 
         protected override void Initialize()
@@ -41,6 +46,7 @@ namespace _2048_Solver
 
             squareColors = new Dictionary<int, Color>();
 
+            squareColors[0] = new Color(255, 255, 255);
             squareColors[2] = new Color(238, 228, 218);
             squareColors[4] = new Color(237, 224, 200);
             squareColors[8] = new Color(242, 177, 121);
@@ -62,7 +68,33 @@ namespace _2048_Solver
 
             tile = Content.Load<Texture2D>("Tile");
             font = Content.Load<SpriteFont>("Font");
+
+            sel.IWebDriver chromeDriver = new sel.Chrome.ChromeDriver(Directory.GetCurrentDirectory())
+            {
+                Url = "https://play2048.co/"
+            };
+            var element = chromeDriver.FindElement(sel.By.ClassName("tile-container"));
+            var children = element.FindElements(sel.By.XPath(".//*"));
+
+            string[] names = new string[children.Count];
+            List<Match> matches = new List<Match>();
+
+            for (int i = 0; i < children.Count; i++)
+            {
+                names[i] = children[i].GetAttribute("class");
+                Regex.Match(names[i], @"tile tile-(\d+) tile-position-(\d)-(\d)");
+                //If successful, add to list;
+            }
         }
+
+        /*
+        tile tile-(\d+) tile-position-(\d)-(\d)
+
+        tile tile-2 tile-position-2-1 tile-new
+        tile-inner
+        tile tile-4 tile-position-2-2 tile-new
+        tile-inner
+        */
 
         protected override void UnloadContent()
         {
@@ -108,10 +140,13 @@ namespace _2048_Solver
             {
                 for (int y = 0; y < game.grid.GetLength(0); y++)
                 {
+                    spriteBatch.Draw(tile, position: new Vector2(x * tile.Width, y * tile.Height) * scale, color: squareColors[game.grid[y, x]], scale: Vector2.One * scale);
                     if(game.grid[y, x] != 0)
                     {
-                        spriteBatch.Draw(tile, position: new Vector2(x * tile.Width, y * tile.Height) * scale, color: squareColors[game.grid[y, x]], scale: Vector2.One * scale);
-                        spriteBatch.DrawString(font, game.grid[y, x].ToString(), new Vector2((x * tile.Width) + tile.Width / 2, (y * tile.Height) + tile.Height / 2) * scale, Color.Black);
+                        var size = font.MeasureString(game.grid[y, x].ToString());
+
+                        //spriteBatch.Draw(tile, position: new Vector2(x * tile.Width, y * tile.Height) * scale, color: squareColors[game.grid[y, x]], scale: Vector2.One * scale);
+                        spriteBatch.DrawString(font, game.grid[y, x].ToString(), new Vector2((x * tile.Width) + tile.Width / 2, (y * tile.Height) + tile.Height / 2) * scale - size / 2, Color.Black);
                     }
                 }
             }
