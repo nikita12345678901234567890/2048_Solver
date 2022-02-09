@@ -20,7 +20,7 @@ namespace GameLibrary
 
     public class Class1
     {
-        public int[,] grid { get; private set; }
+        public int[,] grid { get; /*private*/ set; }
 
         Random random = new Random();
 
@@ -35,11 +35,6 @@ namespace GameLibrary
                     grid[y, x] = 0;
                 }
             }
-
-            grid[0, 0] = 2;
-            grid[0, 1] = 2;
-            grid[0, 2] = 2;
-            grid[0, 3] = 2;
         }
 
         public void Move(Direction direction)

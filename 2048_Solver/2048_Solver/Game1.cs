@@ -20,7 +20,8 @@ namespace _2048_Solver
 
         KeyboardState prevState;
 
-        Class1 game;
+        public static Class1 game;
+        StupidBot bot1;
 
         Texture2D tile;
         SpriteFont font;
@@ -43,6 +44,8 @@ namespace _2048_Solver
             graphics.ApplyChanges();
 
             game = new Class1(4, 4);
+
+            bot1 = new StupidBot();
 
             squareColors = new Dictionary<int, Color>();
 
@@ -68,23 +71,6 @@ namespace _2048_Solver
 
             tile = Content.Load<Texture2D>("Tile");
             font = Content.Load<SpriteFont>("Font");
-
-            sel.IWebDriver chromeDriver = new sel.Chrome.ChromeDriver(Directory.GetCurrentDirectory())
-            {
-                Url = "https://play2048.co/"
-            };
-            var element = chromeDriver.FindElement(sel.By.ClassName("tile-container"));
-            var children = element.FindElements(sel.By.XPath(".//*"));
-
-            string[] names = new string[children.Count];
-            List<Match> matches = new List<Match>();
-
-            for (int i = 0; i < children.Count; i++)
-            {
-                names[i] = children[i].GetAttribute("class");
-                Regex.Match(names[i], @"tile tile-(\d+) tile-position-(\d)-(\d)");
-                //If successful, add to list;
-            }
         }
 
         /*
@@ -106,23 +92,7 @@ namespace _2048_Solver
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Up) && prevState.IsKeyUp(Keys.Up))
-            {
-                game.Move(Direction.Up);
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.Down) && prevState.IsKeyUp(Keys.Down))
-            {
-                game.Move(Direction.Down);
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.Left) && prevState.IsKeyUp(Keys.Left))
-            {
-                game.Move(Direction.Left);
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.Right) && prevState.IsKeyUp(Keys.Right))
-            {
-                game.Move(Direction.Right);
-            }
-
+            
 
             prevState = Keyboard.GetState();
 
