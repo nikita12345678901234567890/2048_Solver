@@ -92,7 +92,7 @@ namespace _2048_Solver
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            
+            bot1.Move();
 
             prevState = Keyboard.GetState();
 

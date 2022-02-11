@@ -23,8 +23,10 @@ namespace _2048_Solver
 
         public void UpdateBoard()
         {
-            var element = chromeDriver.FindElement(sel.By.ClassName("tile-container"));
+            sel.IWebElement element = default;
 
+            element = chromeDriver.FindElement(sel.By.ClassName("tile-container"));
+            
             var children = element.FindElements(sel.By.XPath(".//*"));
 
             string[] names = new string[children.Count];
@@ -34,7 +36,20 @@ namespace _2048_Solver
 
             for (int i = 0; i < children.Count; i++)
             {
-                names[i] = children[i].GetAttribute("class");
+                int attempts = 0;
+                while (attempts < 5)
+                {
+                    try
+                    {
+                        names[i] = children[i].GetAttribute("class");
+                        break;
+                    }
+                    catch (OpenQA.Selenium.StaleElementReferenceException e)
+                    {
+
+                    }
+                    attempts++;
+                }
                 var match = Regex.Match(names[i], @"tile tile-(\d+) tile-position-(\d)-(\d)");
                 //If successful, add to list:
                 if (match.Success)
