@@ -29,7 +29,7 @@ namespace _2048_Solver
             
             var children = element.FindElements(sel.By.XPath(".//*"));
 
-            string[] names = new string[children.Count];
+            List<string> names = new List<string>();
             List<Match> matches = new List<Match>();
 
             int[,] tempGrid = new int[Game1.game.grid.GetLength(0), Game1.game.grid.GetLength(1)];
@@ -37,16 +37,17 @@ namespace _2048_Solver
             for (int i = 0; i < children.Count; i++)
             {
                 int attempts = 0;
-                while (attempts < 5)
+                while (attempts < 25)
                 {
                     try
                     {
-                        names[i] = children[i].GetAttribute("class");
+                        names.Add(children[i].GetAttribute("class"));
                         break;
                     }
                     catch (OpenQA.Selenium.StaleElementReferenceException e)
                     {
-
+                        children = element.FindElements(sel.By.XPath(".//*"));
+                        names.Clear();
                     }
                     attempts++;
                 }

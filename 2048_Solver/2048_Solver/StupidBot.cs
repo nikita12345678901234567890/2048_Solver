@@ -28,7 +28,7 @@ namespace _2048_Solver
         {
             var element = chromeDriver.FindElement(sel.By.TagName("Body"));
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Up) && prevState.IsKeyUp(Keys.Up))
+            if (Keyboard.GetState().IsKeyDown(Keys.M) && prevState.IsKeyUp(Keys.M))
             {
                 Game1.game.Move(Direction.Up);//this not really nessesary
                 element.SendKeys(OpenQA.Selenium.Keys.ArrowUp);
@@ -55,5 +55,40 @@ namespace _2048_Solver
 
             prevState = Keyboard.GetState();
         }
+
+        /*
+         var element = chromeDriver.FindElement(sel.By.TagName("Body"));
+
+            if (Keyboard.GetState().IsKeyDown(Keys.M) && prevState.IsKeyUp(Keys.M))
+            {
+                int fish = random.Next(4);
+                switch (fish)
+                {
+                    case 0:
+                        Game1.game.Move(Direction.Up);//this not really nessesary
+                        element.SendKeys(OpenQA.Selenium.Keys.ArrowUp);
+                        break;
+
+                    case 1:
+                        Game1.game.Move(Direction.Down);//this not really nessesary
+                        element.SendKeys(OpenQA.Selenium.Keys.ArrowDown);
+                        break;
+
+                    case 2:
+                        Game1.game.Move(Direction.Left);//this not really nessesary
+                        element.SendKeys(OpenQA.Selenium.Keys.ArrowLeft);
+                        break;
+
+                    case 3:
+                        Game1.game.Move(Direction.Right);//this not really nessesary
+                        element.SendKeys(OpenQA.Selenium.Keys.ArrowRight);
+                        break;
+                }
+                
+                UpdateBoard();
+            }
+
+            prevState = Keyboard.GetState();
+         */
     }
 }
