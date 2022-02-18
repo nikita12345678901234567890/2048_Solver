@@ -7,6 +7,7 @@ using sel = OpenQA.Selenium;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System;
 
 namespace _2048_Solver
 {
@@ -21,12 +22,18 @@ namespace _2048_Solver
         KeyboardState prevState;
 
         public static Class1 game;
-        StupidBot bot1;
+        MovementBot playerBot;
+        StupidBot randomBot;
+        ehBot ehBot;
 
         Texture2D tile;
         SpriteFont font;
 
         Dictionary<int, Color> squareColors;
+
+        TimeSpan prevTime = new TimeSpan(0);
+        TimeSpan elapsedTime = new TimeSpan(0);
+        TimeSpan moveDelay = TimeSpan.FromMilliseconds(500);
 
         public Game1()
         {
@@ -45,7 +52,10 @@ namespace _2048_Solver
 
             game = new Class1(4, 4);
 
-            bot1 = new StupidBot();
+            //playerBot = new MovementBot();
+            //randomBot = new StupidBot();
+            ehBot = new ehBot();
+
 
             squareColors = new Dictionary<int, Color>();
 
@@ -92,7 +102,16 @@ namespace _2048_Solver
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            bot1.Move();
+            //playerBot.Move();
+
+            if(Keyboard.GetState().IsKeyDown(Keys.M) && prevState.IsKeyUp(Keys.M))//(elapsedTime - prevTime >= moveDelay)
+            {
+                //randomBot.Move();
+                ehBot.Move();
+                prevTime = elapsedTime;
+            }
+
+            elapsedTime += gameTime.ElapsedGameTime;
 
             prevState = Keyboard.GetState();
 

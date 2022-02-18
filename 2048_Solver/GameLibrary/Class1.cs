@@ -137,6 +137,225 @@ namespace GameLibrary
             SpawnTile();
         }
 
+        public int TestMoveForPoints(Direction direction)
+        {
+            int points = 0;
+
+            //Rotate the board so the move is left:
+            switch (direction)
+            {
+                case Direction.Up:
+                    //Rotate 90* counterclockwise
+                    grid = Transpose(grid);
+                    grid = ReverseColumns(grid);
+                    break;
+
+                case Direction.Down:
+                    //Rotate 90* clockwise
+                    grid = Transpose(grid);
+                    grid = ReverseRows(grid);
+                    break;
+
+                case Direction.Left:
+                    //Literally nothing
+                    break;
+
+                case Direction.Right:
+                    //Rotate 108*
+                    grid = ReverseRows(grid);
+                    grid = ReverseColumns(grid);
+                    break;
+            }
+
+            int[,] squishedGrid = new int[grid.GetLength(0), grid.GetLength(1)];
+
+            //Squish all of the tiles to the left:
+            for (int y = 0; y < grid.GetLength(0); y++)
+            {
+                for (int x = 0, i = 0; x < grid.GetLength(1); x++, i++)
+                {
+                    while (x < grid.GetLength(1) - 1 && grid[y, x] == 0)
+                    {
+                        x++;
+                    }
+                    squishedGrid[y, i] = grid[y, x];
+                }
+            }
+            grid = squishedGrid;
+
+            //Do the combining:
+            for (int y = 0; y < grid.GetLength(0); y++)
+            {
+                for (int x = 1; x < grid.GetLength(1); x++)
+                {
+                    if (grid[y, x] == grid[y, x - 1] && grid[y, x] != 0)
+                    {
+                        Combine(new Point(x - 1, y), new Point(x, y));
+                        points += grid[y, x - 1];
+                    }
+                }
+            }
+
+            //Squish them again:
+            for (int y = 0; y < grid.GetLength(0); y++)
+            {
+                for (int x = 0, i = 0; x < grid.GetLength(1); x++, i++)
+                {
+                    while (x < grid.GetLength(1) - 1 && grid[y, x] == 0)
+                    {
+                        x++;
+                    }
+                    squishedGrid[y, i] = grid[y, x];
+                }
+            }
+            grid = squishedGrid;
+
+            //Rotate the board back:
+            switch (direction)
+            {
+                case Direction.Up:
+                    //Rotate 90* clockwise
+                    grid = Transpose(grid);
+                    grid = ReverseRows(grid);
+                    break;
+
+                case Direction.Down:
+                    //Rotate 90* counterclockwise
+                    grid = Transpose(grid);
+                    grid = ReverseColumns(grid);
+                    break;
+
+                case Direction.Left:
+                    //Literally nothing
+                    break;
+
+                case Direction.Right:
+                    //Rotate 108*
+                    grid = ReverseRows(grid);
+                    grid = ReverseColumns(grid);
+                    break;
+            }
+
+            //undo the move:
+            switch (direction)
+            {
+                case Direction.Up:
+                    MoveWithoutSpawning(Direction.Down);
+                    break;
+
+                case Direction.Down:
+                    MoveWithoutSpawning(Direction.Up);
+                    break;
+
+                case Direction.Left:
+                    MoveWithoutSpawning(Direction.Right);
+                    break;
+
+                case Direction.Right:
+                    MoveWithoutSpawning(Direction.Left);
+                    break;
+            }
+
+            return points;
+        }
+
+        public void MoveWithoutSpawning(Direction direction)
+        {
+            //Rotate the board so the move is left:
+            switch (direction)
+            {
+                case Direction.Up:
+                    //Rotate 90* counterclockwise
+                    grid = Transpose(grid);
+                    grid = ReverseColumns(grid);
+                    break;
+
+                case Direction.Down:
+                    //Rotate 90* clockwise
+                    grid = Transpose(grid);
+                    grid = ReverseRows(grid);
+                    break;
+
+                case Direction.Left:
+                    //Literally nothing
+                    break;
+
+                case Direction.Right:
+                    //Rotate 108*
+                    grid = ReverseRows(grid);
+                    grid = ReverseColumns(grid);
+                    break;
+            }
+
+            int[,] squishedGrid = new int[grid.GetLength(0), grid.GetLength(1)];
+
+            //Squish all of the tiles to the left:
+            for (int y = 0; y < grid.GetLength(0); y++)
+            {
+                for (int x = 0, i = 0; x < grid.GetLength(1); x++, i++)
+                {
+                    while (x < grid.GetLength(1) - 1 && grid[y, x] == 0)
+                    {
+                        x++;
+                    }
+                    squishedGrid[y, i] = grid[y, x];
+                }
+            }
+            grid = squishedGrid;
+
+            //Do the combining:
+            for (int y = 0; y < grid.GetLength(0); y++)
+            {
+                for (int x = 1; x < grid.GetLength(1); x++)
+                {
+                    if (grid[y, x] == grid[y, x - 1] && grid[y, x] != 0)
+                    {
+                        Combine(new Point(x - 1, y), new Point(x, y));
+                    }
+                }
+            }
+
+            //Squish them again:
+            for (int y = 0; y < grid.GetLength(0); y++)
+            {
+                for (int x = 0, i = 0; x < grid.GetLength(1); x++, i++)
+                {
+                    while (x < grid.GetLength(1) - 1 && grid[y, x] == 0)
+                    {
+                        x++;
+                    }
+                    squishedGrid[y, i] = grid[y, x];
+                }
+            }
+            grid = squishedGrid;
+
+            //Rotate the board back:
+            switch (direction)
+            {
+                case Direction.Up:
+                    //Rotate 90* clockwise
+                    grid = Transpose(grid);
+                    grid = ReverseRows(grid);
+                    break;
+
+                case Direction.Down:
+                    //Rotate 90* counterclockwise
+                    grid = Transpose(grid);
+                    grid = ReverseColumns(grid);
+                    break;
+
+                case Direction.Left:
+                    //Literally nothing
+                    break;
+
+                case Direction.Right:
+                    //Rotate 108*
+                    grid = ReverseRows(grid);
+                    grid = ReverseColumns(grid);
+                    break;
+            }
+        }
+
         private int[,] Transpose(int[,] grid)
         {
             int[,] result = new int[grid.GetLength(1), grid.GetLength(0)];

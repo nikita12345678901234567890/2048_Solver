@@ -11,11 +11,9 @@ using System;
 
 namespace _2048_Solver
 {
-    public class StupidBot : Bot
+    class ehBot : Bot
     {
-        Random random = new Random();
-
-        public StupidBot()
+        public ehBot()
         {
             chromeDriver = new sel.Chrome.ChromeDriver(Directory.GetCurrentDirectory())
             {
@@ -28,8 +26,26 @@ namespace _2048_Solver
         {
             var element = chromeDriver.FindElement(sel.By.TagName("Body"));
 
-            int fish = random.Next(4);
-            switch (fish)
+            Direction move = Direction.Up;
+            int[] points = new int[4];
+
+            for (int i = 0; i < 4; i++)
+            {
+                points[i] = Game1.game.TestMoveForPoints(move);
+                move++;
+            }
+
+            int largest = 0;
+            for (int i = 0; i < 4; i++)
+            {
+                if (points[i] > points[largest])
+                {
+                    largest = i;
+                }
+            }
+
+
+            switch (largest)
             {
                 case 0:
                     Game1.game.Move(Direction.Up);//this not really nessesary
