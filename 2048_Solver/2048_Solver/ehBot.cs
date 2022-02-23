@@ -13,6 +13,8 @@ namespace _2048_Solver
 {
     class ehBot : Bot
     {
+        Random random = new Random();
+
         public ehBot()
         {
             chromeDriver = new sel.Chrome.ChromeDriver(Directory.GetCurrentDirectory())
@@ -44,6 +46,11 @@ namespace _2048_Solver
                 }
             }
 
+            if (points[largest] == 0)
+            {
+                largest = random.Next(4);
+            }
+
 
             switch (largest)
             {
@@ -68,6 +75,12 @@ namespace _2048_Solver
                     break;
             }
 
+            IEnumerable<int> second = GetBoard().Cast<int>();
+            if (!(Game1.game.grid.Cast<int>().SequenceEqual(second)))
+            {
+                throw new Exception("Board not match!");
+            }
+            
             UpdateBoard();
         }
     }
