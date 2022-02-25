@@ -14,6 +14,8 @@ namespace _2048_Solver
     {
         public sel.IWebDriver chromeDriver;
 
+        public int[,] prevGrid;
+
         public Bot()
         {
             
@@ -64,6 +66,13 @@ namespace _2048_Solver
                     tempGrid[yPos, xPos] = value;
                 }
             }
+
+            if (prevGrid == tempGrid)
+            {
+                return;
+            }
+
+            prevGrid = tempGrid;
             Game1.game.grid = tempGrid;
         }
 

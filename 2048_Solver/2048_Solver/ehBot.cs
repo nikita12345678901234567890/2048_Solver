@@ -55,30 +55,88 @@ namespace _2048_Solver
             switch (largest)
             {
                 case 0:
-                    Game1.game.Move(Direction.Up);//this not really nessesary
+                    Game1.game.Move(Direction.Up);
                     element.SendKeys(OpenQA.Selenium.Keys.ArrowUp);
                     break;
 
                 case 1:
-                    Game1.game.Move(Direction.Down);//this not really nessesary
+                    Game1.game.Move(Direction.Down);
                     element.SendKeys(OpenQA.Selenium.Keys.ArrowDown);
                     break;
 
                 case 2:
-                    Game1.game.Move(Direction.Left);//this not really nessesary
+                    Game1.game.Move(Direction.Left);
                     element.SendKeys(OpenQA.Selenium.Keys.ArrowLeft);
                     break;
 
                 case 3:
-                    Game1.game.Move(Direction.Right);//this not really nessesary
+                    Game1.game.Move(Direction.Right);
                     element.SendKeys(OpenQA.Selenium.Keys.ArrowRight);
                     break;
             }
 
-            IEnumerable<int> second = GetBoard().Cast<int>();
-            if (!(Game1.game.grid.Cast<int>().SequenceEqual(second)))
+            int[,] second = GetBoard();
+
+            if (second != null)
             {
-                throw new Exception("Board not match!");
+                IEnumerable<int> secondEnumerable = second.Cast<int>();
+                if (!(Game1.game.grid.Cast<int>().SequenceEqual(secondEnumerable)))
+                {
+                    Console.WriteLine("Current grid:");
+                    for (int y = 0; y < 4; y++)
+                    {
+                        for (int x = 0; x < 4; x++)
+                        {
+                            if (Game1.game.grid[y, x] != 0)
+                            {
+                                Console.Write(Game1.game.grid[y, x].ToString() + " ");
+                            }
+                            else
+                            {
+                                Console.Write(". ");
+                            }
+                        }
+                        Console.WriteLine();
+                    }
+
+                    Console.WriteLine("Prev grid:");
+                    for (int y = 0; y < 4; y++)
+                    {
+                        for (int x = 0; x < 4; x++)
+                        {
+                            if (Game1.game.prevGrid[y, x] != 0)
+                            {
+                                Console.Write(Game1.game.prevGrid[y, x].ToString() + " ");
+                            }
+                            else
+                            {
+                                Console.Write(". ");
+                            }
+                        }
+                        Console.WriteLine();
+                    }
+
+                    Console.WriteLine("PrevMove = " + Game1.game.prevMove);
+
+                    Console.WriteLine("Their grid:");
+                    for (int y = 0; y < 4; y++)
+                    {
+                        for (int x = 0; x < 4; x++)
+                        {
+                            if (second[y, x] != 0)
+                            {
+                                Console.Write(second[y, x].ToString() + " ");
+                            }
+                            else
+                            {
+                                Console.Write(". ");
+                            }
+                        }
+                        Console.WriteLine();
+                    }
+
+                    throw new Exception("Board not match!");
+                }
             }
             
             UpdateBoard();

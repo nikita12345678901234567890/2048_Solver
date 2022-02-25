@@ -22,6 +22,10 @@ namespace GameLibrary
     {
         public int[,] grid { get; /*private*/ set; }
 
+        public int[,] prevGrid { get; /*private*/ set; }
+
+        public Direction prevMove;
+
         Random random = new Random();
 
         public Class1(int gridWidth, int gridHeight)
@@ -39,6 +43,9 @@ namespace GameLibrary
 
         public void Move(Direction direction)
         {
+            //Saving the grid:
+            prevGrid = grid;
+
             //Rotate the board so the move is left:
             switch (direction)
             {
@@ -135,6 +142,9 @@ namespace GameLibrary
 
             //Spawn a tile:
             //SpawnTile();
+
+            //Save last move:
+            prevMove = direction;
         }
 
         public int TestMoveForPoints(Direction direction)
