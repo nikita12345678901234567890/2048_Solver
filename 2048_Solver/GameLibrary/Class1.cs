@@ -100,6 +100,8 @@ namespace GameLibrary
                 }
             }
 
+            int[,] squishedGridV2 = new int[grid.GetLength(0), grid.GetLength(1)];
+
             //Squish them again:
             for (int y = 0; y < grid.GetLength(0); y++)
             {
@@ -109,10 +111,10 @@ namespace GameLibrary
                     {
                         x++;
                     }
-                    squishedGrid[y, i] = grid[y, x];
+                    squishedGridV2[y, i] = grid[y, x];
                 }
             }
-            grid = squishedGrid;
+            grid = squishedGridV2;
 
             //Rotate the board back:
             switch (direction)

@@ -54,6 +54,7 @@ namespace _2048_Solver
             graphics.ApplyChanges();
 
             game = new Class1(4, 4);
+            testGame = new Class1(4, 4);
 
             //playerBot = new MovementBot();
             //randomBot = new StupidBot();
@@ -74,6 +75,8 @@ namespace _2048_Solver
             squareColors[512] = new Color(237, 200, 80);
             squareColors[1024] = new Color(237, 197, 63);
             squareColors[2048] = new Color(0, 0, 0);
+
+            testGame.grid = game.grid;
 
             base.Initialize();
         }
@@ -117,13 +120,21 @@ namespace _2048_Solver
             if (Keyboard.GetState().IsKeyDown(Keys.W) && prevState.IsKeyUp(Keys.W))
             {
                 testGame.grid = new int[,] {
-                    { 8, 4, 0, 0 },
-                    { 4, 0, 0, 0 },
-                    { 2, 0, 0, 0 },
-                    { 2, 0, 0, 0 }
+                    { 0, 0, 0, 4 },
+                    { 0, 0, 0, 2 },
+                    { 0, 0, 0, 2 },
+                    { 0, 0, 0, 4 }
                 };
+            }
 
+            if (Keyboard.GetState().IsKeyDown(Keys.Up) && prevState.IsKeyUp(Keys.Up))
+            {
                 testGame.Move(Direction.Up);
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Down) && prevState.IsKeyUp(Keys.Down))
+            {
+                testGame.Move(Direction.Down);
             }
 
             elapsedTime += gameTime.ElapsedGameTime;
@@ -155,7 +166,7 @@ namespace _2048_Solver
                 }
             }
 
-
+            /*
             for (int x = 0; x < testGame.grid.GetLength(1); x++)
             {
                 for (int y = 0; y < testGame.grid.GetLength(0); y++)
@@ -170,6 +181,7 @@ namespace _2048_Solver
                     }
                 }
             }
+            */
 
             spriteBatch.End();
 

@@ -14,7 +14,12 @@ namespace _2048_Solver
     {
         public sel.IWebDriver chromeDriver;
 
-        public int[,] prevGrid;
+        public int[,] prevGrid = new int[,] {
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 }
+                };
 
         public Bot()
         {
@@ -67,8 +72,11 @@ namespace _2048_Solver
                 }
             }
 
-            if (prevGrid == tempGrid)
+            IEnumerable<int> prevEnumerable = prevGrid.Cast<int>();
+            if (!(tempGrid.Cast<int>().SequenceEqual(prevEnumerable)))
             {
+                prevGrid = tempGrid;
+                Game1.game.grid = GetBoard();
                 return;
             }
 

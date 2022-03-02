@@ -135,6 +135,26 @@ namespace _2048_Solver
                         Console.WriteLine();
                     }
 
+                    //Do not delete this chunk of code under any circumstances!!! Stuff dies!!!
+                    Console.WriteLine("Their grid but updated:");
+                    var updatedBorad = GetBoard();
+                    for (int y = 0; y < 4; y++)
+                    {
+                        for (int x = 0; x < 4; x++)
+                        {
+                            if (updatedBorad[y, x] != 0)
+                            {
+                                Console.Write(updatedBorad[y, x].ToString() + " ");
+                            }
+                            else
+                            {
+                                Console.Write(". ");
+                            }
+                        }
+                        Console.WriteLine();
+                    }
+                    //End of chunk of code.
+
                     throw new Exception("Board not match!");
                 }
             }
