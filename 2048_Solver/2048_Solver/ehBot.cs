@@ -87,7 +87,7 @@ namespace _2048_Solver
                     {
                         for (int x = 0; x < 4; x++)
                         {
-                            if (Game1.game.grid[y, x] != 0)
+                            if (Game1.game.grid[y, x].value != 0)
                             {
                                 Console.Write(Game1.game.grid[y, x].ToString() + " ");
                             }
@@ -104,7 +104,7 @@ namespace _2048_Solver
                     {
                         for (int x = 0; x < 4; x++)
                         {
-                            if (Game1.game.prevGrid[y, x] != 0)
+                            if (Game1.game.prevGrid[y, x].value != 0)
                             {
                                 Console.Write(Game1.game.prevGrid[y, x].ToString() + " ");
                             }
@@ -154,6 +154,13 @@ namespace _2048_Solver
                         Console.WriteLine();
                     }
                     //End of chunk of code.
+
+                    IEnumerable<int> updatedEnumerable = second.Cast<int>();
+                    if (Game1.game.grid.Cast<int>().SequenceEqual(updatedEnumerable))
+                    {
+                        UpdateBoard();
+                        return;
+                    }
 
                     throw new Exception("Board not match!");
                 }

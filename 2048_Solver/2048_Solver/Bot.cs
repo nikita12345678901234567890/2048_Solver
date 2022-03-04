@@ -14,13 +14,6 @@ namespace _2048_Solver
     {
         public sel.IWebDriver chromeDriver;
 
-        public int[,] prevGrid = new int[,] {
-                    { 0, 0, 0, 0 },
-                    { 0, 0, 0, 0 },
-                    { 0, 0, 0, 0 },
-                    { 0, 0, 0, 0 }
-                };
-
         public Bot()
         {
             
@@ -39,7 +32,7 @@ namespace _2048_Solver
             List<string> names = new List<string>();
             List<Match> matches = new List<Match>();
 
-            int[,] tempGrid = new int[Game1.game.grid.GetLength(0), Game1.game.grid.GetLength(1)];
+            (int value, bool nEw)[,] tempGrid = new (int value, bool nEw)[Game1.game.grid.GetLength(0), Game1.game.grid.GetLength(1)];
 
             for (int i = 0; i < children.Count; i++)
             {
@@ -67,20 +60,11 @@ namespace _2048_Solver
                     int value = int.Parse(match.Groups[1].Value);
                     int xPos = int.Parse(match.Groups[2].Value) - 1;
                     int yPos = int.Parse(match.Groups[3].Value) - 1;
-
-                    tempGrid[yPos, xPos] = value;
+                    
+                    tempGrid[yPos, xPos] = (value, match.Groups[0].Value.Contains("tile-new"));
                 }
             }
 
-            IEnumerable<int> prevEnumerable = prevGrid.Cast<int>();
-            if (!(tempGrid.Cast<int>().SequenceEqual(prevEnumerable)))
-            {
-                prevGrid = tempGrid;
-                Game1.game.grid = GetBoard();
-                return;
-            }
-
-            prevGrid = tempGrid;
             Game1.game.grid = tempGrid;
         }
 

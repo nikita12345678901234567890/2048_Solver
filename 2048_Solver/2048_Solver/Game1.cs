@@ -119,12 +119,13 @@ namespace _2048_Solver
 
             if (Keyboard.GetState().IsKeyDown(Keys.W) && prevState.IsKeyUp(Keys.W))
             {
-                testGame.grid = new int[,] {
-                    { 0, 0, 0, 4 },
-                    { 0, 0, 0, 2 },
-                    { 0, 0, 0, 2 },
-                    { 0, 0, 0, 4 }
+                testGame.grid = new (int value, bool nEw)[,] {
+                    { (0, false), (0, false), (0, false), (4, false) },
+                    { (0, false), (0, false), (0, false), (2, false) },
+                    { (0, false), (0, false), (0, false), (2, false) },
+                    { (0, false), (0, false), (0, false), (4, false) }
                 };
+
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Up) && prevState.IsKeyUp(Keys.Up))
@@ -155,12 +156,11 @@ namespace _2048_Solver
             {
                 for (int y = 0; y < game.grid.GetLength(0); y++)
                 {
-                    spriteBatch.Draw(tile, position: new Vector2(x * tile.Width, y * tile.Height) * scale, color: squareColors[game.grid[y, x]], scale: Vector2.One * scale);
-                    if (game.grid[y, x] != 0)
+                    spriteBatch.Draw(tile, position: new Vector2(x * tile.Width, y * tile.Height) * scale, color: squareColors[game.grid[y, x].value], scale: Vector2.One * scale);
+                    if (game.grid[y, x].value != 0)
                     {
                         var size = font.MeasureString(game.grid[y, x].ToString());
 
-                        //spriteBatch.Draw(tile, position: new Vector2(x * tile.Width, y * tile.Height) * scale, color: squareColors[game.grid[y, x]], scale: Vector2.One * scale);
                         spriteBatch.DrawString(font, game.grid[y, x].ToString(), new Vector2((x * tile.Width) + tile.Width / 2, (y * tile.Height) + tile.Height / 2) * scale - size / 2, Color.Black);
                     }
                 }

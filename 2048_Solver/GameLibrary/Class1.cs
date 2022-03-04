@@ -20,9 +20,9 @@ namespace GameLibrary
 
     public class Class1
     {
-        public int[,] grid { get; /*private*/ set; }
+        public (int value, bool nEw)[,] grid { get; /*private*/ set; }
 
-        public int[,] prevGrid { get; /*private*/ set; }
+        public (int value, bool nEw)[,] prevGrid { get; /*private*/ set; }
 
         public Direction prevMove;
 
@@ -30,13 +30,13 @@ namespace GameLibrary
 
         public Class1(int gridWidth, int gridHeight)
         {
-            grid = new int[gridHeight, gridWidth];
+            grid = new (int value, bool nEw)[gridHeight, gridWidth];
 
             for (int y = 0; y < gridHeight; y++)
             {
                 for (int x = 0; x < gridWidth; x++)
                 {
-                    grid[y, x] = 0;
+                    grid[y, x].value = 0;
                 }
             }
         }
@@ -72,14 +72,14 @@ namespace GameLibrary
                     break;
             }
 
-            int[,] squishedGrid = new int[grid.GetLength(0), grid.GetLength(1)];
+            (int value, bool nEw)[,] squishedGrid = new (int value, bool nEw)[grid.GetLength(0), grid.GetLength(1)];
 
             //Squish all of the tiles to the left:
             for (int y = 0; y < grid.GetLength(0); y++)
             {
                 for (int x = 0, i = 0; x < grid.GetLength(1); x++, i++)
                 {
-                    while (x < grid.GetLength(1) - 1 && grid[y, x] == 0)
+                    while (x < grid.GetLength(1) - 1 && grid[y, x].value == 0)
                     {
                         x++;
                     }
@@ -93,21 +93,21 @@ namespace GameLibrary
             {
                 for (int x = 1; x < grid.GetLength(1); x++)
                 {
-                    if (grid[y, x] == grid[y, x - 1] && grid[y, x] != 0)
+                    if (grid[y, x] == grid[y, x - 1] && grid[y, x].value != 0)
                     {
                         Combine(new Point(x - 1, y), new Point(x, y));
                     }
                 }
             }
 
-            int[,] squishedGridV2 = new int[grid.GetLength(0), grid.GetLength(1)];
+            (int value, bool nEw)[,] squishedGridV2 = new (int value, bool nEw)[grid.GetLength(0), grid.GetLength(1)];
 
             //Squish them again:
             for (int y = 0; y < grid.GetLength(0); y++)
             {
                 for (int x = 0, i = 0; x < grid.GetLength(1); x++, i++)
                 {
-                    while (x < grid.GetLength(1) - 1 && grid[y, x] == 0)
+                    while (x < grid.GetLength(1) - 1 && grid[y, x].value == 0)
                     {
                         x++;
                     }
@@ -151,7 +151,7 @@ namespace GameLibrary
 
         public int TestMoveForPoints(Direction direction)
         {
-            int[,] gridBeforeMove = grid;
+            (int value, bool nEw)[,] gridBeforeMove = grid;
 
             int points = 0;
 
@@ -181,14 +181,14 @@ namespace GameLibrary
                     break;
             }
 
-            int[,] squishedGrid = new int[grid.GetLength(0), grid.GetLength(1)];
+            (int value, bool nEw)[,] squishedGrid = new (int value, bool nEw)[grid.GetLength(0), grid.GetLength(1)];
 
             //Squish all of the tiles to the left:
             for (int y = 0; y < grid.GetLength(0); y++)
             {
                 for (int x = 0, i = 0; x < grid.GetLength(1); x++, i++)
                 {
-                    while (x < grid.GetLength(1) - 1 && grid[y, x] == 0)
+                    while (x < grid.GetLength(1) - 1 && grid[y, x].value == 0)
                     {
                         x++;
                     }
@@ -202,10 +202,10 @@ namespace GameLibrary
             {
                 for (int x = 1; x < grid.GetLength(1); x++)
                 {
-                    if (grid[y, x] == grid[y, x - 1] && grid[y, x] != 0)
+                    if (grid[y, x] == grid[y, x - 1] && grid[y, x].value != 0)
                     {
                         Combine(new Point(x - 1, y), new Point(x, y));
-                        points += grid[y, x - 1];
+                        points += grid[y, x - 1].value;
                     }
                 }
             }
@@ -215,9 +215,9 @@ namespace GameLibrary
             return points;
         }
 
-        private int[,] Transpose(int[,] grid)
+        private (int value, bool nEw)[,] Transpose((int value, bool nEw)[,] grid)
         {
-            int[,] result = new int[grid.GetLength(1), grid.GetLength(0)];
+            (int value, bool nEw)[,] result = new (int value, bool nEw)[grid.GetLength(1), grid.GetLength(0)];
 
             for (int y = 0; y < grid.GetLength(0); y++)
             {
@@ -230,9 +230,9 @@ namespace GameLibrary
             return result;
         }
 
-        private int[,] ReverseRows(int[,] grid)
+        private (int value, bool nEw)[,] ReverseRows((int value, bool nEw)[,] grid)
         {
-            int[,] result = new int[grid.GetLength(0), grid.GetLength(1)];
+            (int value, bool nEw)[,] result = new (int value, bool nEw)[grid.GetLength(0), grid.GetLength(1)];
 
             for (int y = 0; y < grid.GetLength(0); y++)
             {
@@ -245,9 +245,9 @@ namespace GameLibrary
             return result;
         }
 
-        private int[,] ReverseColumns(int[,] grid)
+        private (int value, bool nEw)[,] ReverseColumns((int value, bool nEw)[,] grid)
         {
-            int[,] result = new int[grid.GetLength(0), grid.GetLength(1)];
+            (int value, bool nEw)[,] result = new (int value, bool nEw)[grid.GetLength(0), grid.GetLength(1)];
 
             for (int y = 0; y < grid.GetLength(0); y++)
             {
@@ -264,8 +264,8 @@ namespace GameLibrary
         {
             if (grid[leftTile.y, leftTile.x] == grid[rightTile.y, rightTile.x])
             {
-                grid[leftTile.y, leftTile.x] *= 2;
-                grid[rightTile.y, rightTile.x] = 0;
+                grid[leftTile.y, leftTile.x] = (grid[leftTile.y, leftTile.x].value * 2, false);
+                grid[rightTile.y, rightTile.x] = (0, false);
             }
         }
 
@@ -279,7 +279,7 @@ namespace GameLibrary
             {
                 for (int x = 0; x < grid.GetLength(0); x++)
                 {
-                    if (grid[y, x] == 0)
+                    if (grid[y, x].value == 0)
                     {
                         availableSpaces.Add(new Point(x, y));
                     }
@@ -299,11 +299,11 @@ namespace GameLibrary
 
             if (number % 3 == 0)
             {
-                grid[ChosenSpot.y, ChosenSpot.x] = 4;
+                grid[ChosenSpot.y, ChosenSpot.x].value = 4;
             }
             else
             {
-                grid[ChosenSpot.y, ChosenSpot.x] = 2;
+                grid[ChosenSpot.y, ChosenSpot.x].value = 2;
             }
         }
     }
