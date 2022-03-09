@@ -84,6 +84,7 @@ namespace GameLibrary
                         x++;
                     }
                     squishedGrid[y, i] = grid[y, x];
+                    squishedGrid[y, i].nEw = false;//This very important!!!
                 }
             }
             grid = squishedGrid;

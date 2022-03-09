@@ -61,14 +61,14 @@ namespace _2048_Solver
                     int xPos = int.Parse(match.Groups[2].Value) - 1;
                     int yPos = int.Parse(match.Groups[3].Value) - 1;
                     
-                    tempGrid[yPos, xPos] = (value, match.Groups[0].Value.Contains("tile-new"));
+                    tempGrid[yPos, xPos] = (value, names[i].Contains("tile-new"));
                 }
             }
 
             Game1.game.grid = tempGrid;
         }
 
-        public int[,] GetBoard()
+        public (int value, bool nEw)[,] GetBoard()
         {
             sel.IWebElement element = default;
 
@@ -79,7 +79,7 @@ namespace _2048_Solver
             List<string> names = new List<string>();
             List<Match> matches = new List<Match>();
 
-            int[,] tempGrid = new int[Game1.game.grid.GetLength(0), Game1.game.grid.GetLength(1)];
+            (int value, bool nEw)[,] tempGrid = new (int value, bool nEw)[Game1.game.grid.GetLength(0), Game1.game.grid.GetLength(1)];
 
             for (int i = 0; i < children.Count; i++)
             {
@@ -98,7 +98,7 @@ namespace _2048_Solver
                     }
                     attempts++;
                 }
-                var match = Regex.Match(names[i], @"tile tile-(\d+) tile-position-(\d)-(\d)(?! ?tile-new).*");
+                var match = Regex.Match(names[i], @"tile tile-(\d+) tile-position-(\d)-(\d)");
                 //If successful, add to list:
                 if (match.Success)
                 {
@@ -108,10 +108,29 @@ namespace _2048_Solver
                     int xPos = int.Parse(match.Groups[2].Value) - 1;
                     int yPos = int.Parse(match.Groups[3].Value) - 1;
 
-                    tempGrid[yPos, xPos] = value;
+                    tempGrid[yPos, xPos] = (value, names[i].Contains("tile-new"));
                 }
             }
+
             return tempGrid;
+        }
+
+        public bool BoardMatch()
+        {
+            var webBoard = GetBoard();
+            for (int y = 0; y < Game1.game.grid.GetLength(0); y++)
+            {
+                for (int x = 0; x < Game1.game.grid.GetLength(1); x++)
+                {
+                    bool ok = Game1.game.grid[y, x].value == webBoard[y, x].value || (webBoard[y, x].nEw && (Game1.game.grid[y, x].value == 0 || Game1.game.grid[y, x].nEw));
+                    if(!ok)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
     }
 }

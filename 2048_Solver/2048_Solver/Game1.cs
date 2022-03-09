@@ -159,9 +159,9 @@ namespace _2048_Solver
                     spriteBatch.Draw(tile, position: new Vector2(x * tile.Width, y * tile.Height) * scale, color: squareColors[game.grid[y, x].value], scale: Vector2.One * scale);
                     if (game.grid[y, x].value != 0)
                     {
-                        var size = font.MeasureString(game.grid[y, x].ToString());
+                        var size = font.MeasureString(game.grid[y, x].value.ToString());
 
-                        spriteBatch.DrawString(font, game.grid[y, x].ToString(), new Vector2((x * tile.Width) + tile.Width / 2, (y * tile.Height) + tile.Height / 2) * scale - size / 2, Color.Black);
+                        spriteBatch.DrawString(font, game.grid[y, x].value.ToString(), new Vector2((x * tile.Width) + tile.Width / 2, (y * tile.Height) + tile.Height / 2) * scale - size / 2, Color.Black);
                     }
                 }
             }

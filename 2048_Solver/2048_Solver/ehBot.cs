@@ -75,12 +75,11 @@ namespace _2048_Solver
                     break;
             }
 
-            int[,] second = GetBoard();
+            (int value, bool nEw)[,] second = GetBoard();
 
             if (second != null)
             {
-                IEnumerable<int> secondEnumerable = second.Cast<int>();
-                if (!(Game1.game.grid.Cast<int>().SequenceEqual(secondEnumerable)))
+                if (!BoardMatch())
                 {
                     Console.WriteLine("Current grid:");
                     for (int y = 0; y < 4; y++)
@@ -89,7 +88,7 @@ namespace _2048_Solver
                         {
                             if (Game1.game.grid[y, x].value != 0)
                             {
-                                Console.Write(Game1.game.grid[y, x].ToString() + " ");
+                                Console.Write(Game1.game.grid[y, x].value.ToString() + " ");
                             }
                             else
                             {
@@ -106,7 +105,7 @@ namespace _2048_Solver
                         {
                             if (Game1.game.prevGrid[y, x].value != 0)
                             {
-                                Console.Write(Game1.game.prevGrid[y, x].ToString() + " ");
+                                Console.Write(Game1.game.prevGrid[y, x].value.ToString() + " ");
                             }
                             else
                             {
@@ -123,9 +122,9 @@ namespace _2048_Solver
                     {
                         for (int x = 0; x < 4; x++)
                         {
-                            if (second[y, x] != 0)
+                            if (second[y, x].value != 0)
                             {
-                                Console.Write(second[y, x].ToString() + " ");
+                                Console.Write(second[y, x].value.ToString() + " ");
                             }
                             else
                             {
@@ -142,9 +141,9 @@ namespace _2048_Solver
                     {
                         for (int x = 0; x < 4; x++)
                         {
-                            if (updatedBorad[y, x] != 0)
+                            if (updatedBorad[y, x].value != 0)
                             {
-                                Console.Write(updatedBorad[y, x].ToString() + " ");
+                                Console.Write(updatedBorad[y, x].value.ToString() + " ");
                             }
                             else
                             {
@@ -155,8 +154,8 @@ namespace _2048_Solver
                     }
                     //End of chunk of code.
 
-                    IEnumerable<int> updatedEnumerable = second.Cast<int>();
-                    if (Game1.game.grid.Cast<int>().SequenceEqual(updatedEnumerable))
+                    IEnumerable<(int value, bool nEw)> updatedEnumerable = second.Cast<(int value, bool nEw)>();
+                    if (Game1.game.grid.Cast<(int value, bool nEw)>().SequenceEqual(updatedEnumerable))
                     {
                         UpdateBoard();
                         return;
