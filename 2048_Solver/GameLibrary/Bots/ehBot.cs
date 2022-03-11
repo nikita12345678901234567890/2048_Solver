@@ -1,7 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using GameLibrary;
+﻿using GameLibrary;
 using System.Collections.Generic;
 using sel = OpenQA.Selenium;
 using System.IO;
@@ -11,17 +8,15 @@ using System;
 
 namespace _2048_Solver
 {
-    class ehBot : Bot
+    public class ehBot : Bot
     {
         Random random = new Random();
 
         public ehBot()
+            : base()
         {
-            chromeDriver = new sel.Chrome.ChromeDriver(Directory.GetCurrentDirectory())
-            {
-                Url = "https://play2048.co/"
-            };
-            UpdateBoard();
+            
+
         }
 
         public override void Move()
@@ -33,7 +28,7 @@ namespace _2048_Solver
 
             for (int i = 0; i < 4; i++)
             {
-                points[i] = Game1.game.TestMoveForPoints(move);
+                points[i] = board.TestMoveForPoints(move);
                 move++;
             }
 
@@ -55,22 +50,22 @@ namespace _2048_Solver
             switch (largest)
             {
                 case 0:
-                    Game1.game.Move(Direction.Up);
+                    board.Move(Direction.Up);
                     element.SendKeys(OpenQA.Selenium.Keys.ArrowUp);
                     break;
 
                 case 1:
-                    Game1.game.Move(Direction.Down);
+                    board.Move(Direction.Down);
                     element.SendKeys(OpenQA.Selenium.Keys.ArrowDown);
                     break;
 
                 case 2:
-                    Game1.game.Move(Direction.Left);
+                    board.Move(Direction.Left);
                     element.SendKeys(OpenQA.Selenium.Keys.ArrowLeft);
                     break;
 
                 case 3:
-                    Game1.game.Move(Direction.Right);
+                    board.Move(Direction.Right);
                     element.SendKeys(OpenQA.Selenium.Keys.ArrowRight);
                     break;
             }
@@ -86,9 +81,9 @@ namespace _2048_Solver
                     {
                         for (int x = 0; x < 4; x++)
                         {
-                            if (Game1.game.grid[y, x].value != 0)
+                            if (board.grid[y, x].value != 0)
                             {
-                                Console.Write(Game1.game.grid[y, x].value.ToString() + " ");
+                                Console.Write(board.grid[y, x].value.ToString() + " ");
                             }
                             else
                             {
@@ -103,9 +98,9 @@ namespace _2048_Solver
                     {
                         for (int x = 0; x < 4; x++)
                         {
-                            if (Game1.game.prevGrid[y, x].value != 0)
+                            if (board.prevGrid[y, x].value != 0)
                             {
-                                Console.Write(Game1.game.prevGrid[y, x].value.ToString() + " ");
+                                Console.Write(board.prevGrid[y, x].value.ToString() + " ");
                             }
                             else
                             {
@@ -115,7 +110,7 @@ namespace _2048_Solver
                         Console.WriteLine();
                     }
 
-                    Console.WriteLine("PrevMove = " + Game1.game.prevMove);
+                    Console.WriteLine("PrevMove = " + board.prevMove);
 
                     Console.WriteLine("Their grid:");
                     for (int y = 0; y < 4; y++)
@@ -155,7 +150,7 @@ namespace _2048_Solver
                     //End of chunk of code.
 
                     IEnumerable<(int value, bool nEw)> updatedEnumerable = second.Cast<(int value, bool nEw)>();
-                    if (Game1.game.grid.Cast<(int value, bool nEw)>().SequenceEqual(updatedEnumerable))
+                    if (board.grid.Cast<(int value, bool nEw)>().SequenceEqual(updatedEnumerable))
                     {
                         UpdateBoard();
                         return;

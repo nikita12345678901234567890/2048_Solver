@@ -16,12 +16,9 @@ namespace _2048_Solver
         Random random = new Random();
 
         public StupidBot()
+            : base()
         {
-            chromeDriver = new sel.Chrome.ChromeDriver(Directory.GetCurrentDirectory())
-            {
-                Url = "https://play2048.co/"
-            };
-            UpdateBoard();
+            
         }
 
         public override void Move()

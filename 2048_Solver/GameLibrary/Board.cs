@@ -18,7 +18,7 @@ namespace GameLibrary
         }
     }
 
-    public class Class1
+    public class Board
     {
         public (int value, bool nEw)[,] grid { get; /*private*/ set; }
 
@@ -28,7 +28,7 @@ namespace GameLibrary
 
         Random random = new Random();
 
-        public Class1(int gridWidth, int gridHeight)
+        public Board(int gridWidth, int gridHeight)
         {
             grid = new (int value, bool nEw)[gridHeight, gridWidth];
 

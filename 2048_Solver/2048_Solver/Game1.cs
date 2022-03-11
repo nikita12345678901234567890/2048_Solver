@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System;
+using WindowsInput;
 
 namespace _2048_Solver
 {
@@ -21,16 +22,18 @@ namespace _2048_Solver
 
         KeyboardState prevState;
 
-        public static Class1 game;
+        public static Board game;
 
-        public static Class1 testGame;
+        public static Board testGame;
 
         MovementBot playerBot;
         StupidBot randomBot;
         ehBot ehBot;
 
+
         Texture2D tile;
         SpriteFont font;
+
 
         Dictionary<int, Color> squareColors;
 
@@ -53,8 +56,8 @@ namespace _2048_Solver
             graphics.PreferredBackBufferHeight = 800;
             graphics.ApplyChanges();
 
-            game = new Class1(4, 4);
-            testGame = new Class1(4, 4);
+            game = new Board(4, 4);
+            testGame = new Board(4, 4);
 
             //playerBot = new MovementBot();
             //randomBot = new StupidBot();
@@ -85,8 +88,11 @@ namespace _2048_Solver
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+
             tile = Content.Load<Texture2D>("Tile");
             font = Content.Load<SpriteFont>("Font");
+            //Example of keypress
+            //InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_K);
         }
 
         /*
@@ -151,37 +157,7 @@ namespace _2048_Solver
 
             spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
-            int scale = 20;
-            for (int x = 0; x < game.grid.GetLength(1); x++)
-            {
-                for (int y = 0; y < game.grid.GetLength(0); y++)
-                {
-                    spriteBatch.Draw(tile, position: new Vector2(x * tile.Width, y * tile.Height) * scale, color: squareColors[game.grid[y, x].value], scale: Vector2.One * scale);
-                    if (game.grid[y, x].value != 0)
-                    {
-                        var size = font.MeasureString(game.grid[y, x].value.ToString());
-
-                        spriteBatch.DrawString(font, game.grid[y, x].value.ToString(), new Vector2((x * tile.Width) + tile.Width / 2, (y * tile.Height) + tile.Height / 2) * scale - size / 2, Color.Black);
-                    }
-                }
-            }
-
-            /*
-            for (int x = 0; x < testGame.grid.GetLength(1); x++)
-            {
-                for (int y = 0; y < testGame.grid.GetLength(0); y++)
-                {
-                    spriteBatch.Draw(tile, position: new Vector2(x * tile.Width, y * tile.Height) * scale, color: squareColors[testGame.grid[y, x]], scale: Vector2.One * scale);
-                    if (testGame.grid[y, x] != 0)
-                    {
-                        var size = font.MeasureString(testGame.grid[y, x].ToString());
-
-                        //spriteBatch.Draw(tile, position: new Vector2(x * tile.Width, y * tile.Height) * scale, color: squareColors[game.grid[y, x]], scale: Vector2.One * scale);
-                        spriteBatch.DrawString(font, testGame.grid[y, x].ToString(), new Vector2((x * tile.Width) + tile.Width / 2, (y * tile.Height) + tile.Height / 2) * scale - size / 2, Color.Black);
-                    }
-                }
-            }
-            */
+          //  spriteBatch.DrawBoard(board);
 
             spriteBatch.End();
 

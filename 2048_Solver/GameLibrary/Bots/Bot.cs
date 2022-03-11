@@ -1,12 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using GameLibrary;
+﻿using GameLibrary;
 using System.Collections.Generic;
 using sel = OpenQA.Selenium;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
+using WindowsInput;
 
 namespace _2048_Solver
 {
@@ -14,9 +11,19 @@ namespace _2048_Solver
     {
         public sel.IWebDriver chromeDriver;
 
+        InputSimulator inputSimulator;
+
+        public Board board;
+
         public Bot()
         {
-            
+            inputSimulator = new InputSimulator();
+
+            chromeDriver = new sel.Chrome.ChromeDriver(Directory.GetCurrentDirectory())
+            {
+                Url = "https://play2048.co/"
+            };
+            UpdateBoard();
         }
 
         public abstract void Move();
@@ -32,7 +39,7 @@ namespace _2048_Solver
             List<string> names = new List<string>();
             List<Match> matches = new List<Match>();
 
-            (int value, bool nEw)[,] tempGrid = new (int value, bool nEw)[Game1.game.grid.GetLength(0), Game1.game.grid.GetLength(1)];
+            (int value, bool nEw)[,] tempGrid = new (int value, bool nEw)[board.grid.GetLength(0), board.grid.GetLength(1)];
 
             for (int i = 0; i < children.Count; i++)
             {
@@ -65,7 +72,7 @@ namespace _2048_Solver
                 }
             }
 
-            Game1.game.grid = tempGrid;
+            board.grid = tempGrid;
         }
 
         public (int value, bool nEw)[,] GetBoard()
@@ -79,7 +86,7 @@ namespace _2048_Solver
             List<string> names = new List<string>();
             List<Match> matches = new List<Match>();
 
-            (int value, bool nEw)[,] tempGrid = new (int value, bool nEw)[Game1.game.grid.GetLength(0), Game1.game.grid.GetLength(1)];
+            (int value, bool nEw)[,] tempGrid = new (int value, bool nEw)[board.grid.GetLength(0), board.grid.GetLength(1)];
 
             for (int i = 0; i < children.Count; i++)
             {
@@ -118,11 +125,11 @@ namespace _2048_Solver
         public bool BoardMatch()
         {
             var webBoard = GetBoard();
-            for (int y = 0; y < Game1.game.grid.GetLength(0); y++)
+            for (int y = 0; y < board.grid.GetLength(0); y++)
             {
-                for (int x = 0; x < Game1.game.grid.GetLength(1); x++)
+                for (int x = 0; x < board.grid.GetLength(1); x++)
                 {
-                    bool ok = Game1.game.grid[y, x].value == webBoard[y, x].value || (webBoard[y, x].nEw && (Game1.game.grid[y, x].value == 0 || Game1.game.grid[y, x].nEw));
+                    bool ok = board.grid[y, x].value == webBoard[y, x].value || (webBoard[y, x].nEw && (board.grid[y, x].value == 0 || board.grid[y, x].nEw));
                     if(!ok)
                     {
                         return false;
@@ -132,5 +139,6 @@ namespace _2048_Solver
 
             return true;
         }
+
     }
 }
