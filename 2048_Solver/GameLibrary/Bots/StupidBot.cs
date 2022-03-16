@@ -1,7 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using GameLibrary;
+﻿using GameLibrary;
 using System.Collections.Generic;
 using sel = OpenQA.Selenium;
 using System.IO;
@@ -9,10 +6,12 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System;
 
-namespace _2048_Solver
+namespace GameLibrary
 {
     public class StupidBot : Bot
     {
+
+
         Random random = new Random();
 
         public StupidBot()
@@ -29,23 +28,23 @@ namespace _2048_Solver
             switch (fish)
             {
                 case 0:
-                    Game1.game.Move(Direction.Up);//this not really nessesary
-                    element.SendKeys(OpenQA.Selenium.Keys.ArrowUp);
+                    board.Move(Direction.Up);
+                    inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.UP);
                     break;
 
                 case 1:
-                    Game1.game.Move(Direction.Down);//this not really nessesary
-                    element.SendKeys(OpenQA.Selenium.Keys.ArrowDown);
+                    board.Move(Direction.Down);
+                    inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.DOWN);
                     break;
 
                 case 2:
-                    Game1.game.Move(Direction.Left);//this not really nessesary
-                    element.SendKeys(OpenQA.Selenium.Keys.ArrowLeft);
+                    board.Move(Direction.Left);
+                    inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.LEFT);
                     break;
 
                 case 3:
-                    Game1.game.Move(Direction.Right);//this not really nessesary
-                    element.SendKeys(OpenQA.Selenium.Keys.ArrowRight);
+                    board.Move(Direction.Right);
+                    inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT);
                     break;
             }
 

@@ -5,19 +5,23 @@ using System.IO;
 using System.Text.RegularExpressions;
 using WindowsInput;
 
-namespace _2048_Solver
+namespace GameLibrary
 {
     public abstract class Bot
     {
         public sel.IWebDriver chromeDriver;
 
-        InputSimulator inputSimulator;
+        protected InputSimulator inputSimulator;
 
         public Board board;
+
+        public bool gameOver = false;
 
         public Bot()
         {
             inputSimulator = new InputSimulator();
+
+            board = new Board(4, 4);
 
             chromeDriver = new sel.Chrome.ChromeDriver(Directory.GetCurrentDirectory())
             {
@@ -73,6 +77,8 @@ namespace _2048_Solver
             }
 
             board.grid = tempGrid;
+
+            gameOver = CheckGameOver();
         }
 
         public (int value, bool nEw)[,] GetBoard()
@@ -140,5 +146,45 @@ namespace _2048_Solver
             return true;
         }
 
+        public bool CheckGameOver()
+        {
+            sel.IWebElement element = default;
+
+            element = chromeDriver.FindElement(sel.By.ClassName("game-container"));
+
+            var children = element.FindElements(sel.By.XPath(".//*"));
+
+            List<string> names = new List<string>();
+            List<Match> matches = new List<Match>();
+
+            for (int i = 0; i < children.Count; i++)
+            {
+                int attempts = 0;
+                while (attempts < 25)
+                {
+                    try
+                    {
+                        names.Add(children[i].GetAttribute("class"));
+                        break;
+                    }
+                    catch (OpenQA.Selenium.StaleElementReferenceException e)
+                    {
+                        children = element.FindElements(sel.By.XPath(".//*"));
+                        names.Clear();
+                    }
+                    attempts++;
+                }
+                var match = Regex.Match(names[i], @"game-message game-over");
+                //If successful, add to list:
+                if (match.Success)
+                {
+                    matches.Add(match);
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

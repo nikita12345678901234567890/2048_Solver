@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System;
 
-namespace _2048_Solver
+namespace GameLibrary
 {
     public class ehBot : Bot
     {
@@ -51,22 +51,22 @@ namespace _2048_Solver
             {
                 case 0:
                     board.Move(Direction.Up);
-                    element.SendKeys(OpenQA.Selenium.Keys.ArrowUp);
+                    inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.UP);
                     break;
 
                 case 1:
                     board.Move(Direction.Down);
-                    element.SendKeys(OpenQA.Selenium.Keys.ArrowDown);
+                    inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.DOWN);
                     break;
 
                 case 2:
                     board.Move(Direction.Left);
-                    element.SendKeys(OpenQA.Selenium.Keys.ArrowLeft);
+                    inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.LEFT);
                     break;
 
                 case 3:
                     board.Move(Direction.Right);
-                    element.SendKeys(OpenQA.Selenium.Keys.ArrowRight);
+                    inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT);
                     break;
             }
 

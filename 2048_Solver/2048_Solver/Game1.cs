@@ -22,13 +22,9 @@ namespace _2048_Solver
 
         KeyboardState prevState;
 
-        public static Board game;
+        InputSimulator inputSimulator;
 
-        public static Board testGame;
-
-        MovementBot playerBot;
-        StupidBot randomBot;
-        ehBot ehBot;
+        LordOfTheBots botMan;
 
 
         Texture2D tile;
@@ -56,13 +52,9 @@ namespace _2048_Solver
             graphics.PreferredBackBufferHeight = 800;
             graphics.ApplyChanges();
 
-            game = new Board(4, 4);
-            testGame = new Board(4, 4);
+            inputSimulator = new InputSimulator();
 
-            //playerBot = new MovementBot();
-            //randomBot = new StupidBot();
-            ehBot = new ehBot();
-
+            botMan = new LordOfTheBots();
 
             squareColors = new Dictionary<int, Color>();
 
@@ -79,8 +71,6 @@ namespace _2048_Solver
             squareColors[1024] = new Color(237, 197, 63);
             squareColors[2048] = new Color(0, 0, 0);
 
-            testGame.grid = game.grid;
-
             base.Initialize();
         }
 
@@ -91,18 +81,7 @@ namespace _2048_Solver
 
             tile = Content.Load<Texture2D>("Tile");
             font = Content.Load<SpriteFont>("Font");
-            //Example of keypress
-            //InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_K);
         }
-
-        /*
-        tile tile-(\d+) tile-position-(\d)-(\d)
-
-        tile tile-2 tile-position-2-1 tile-new
-        tile-inner
-        tile tile-4 tile-position-2-2 tile-new
-        tile-inner
-        */
 
         protected override void UnloadContent()
         {
@@ -114,35 +93,27 @@ namespace _2048_Solver
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            //playerBot.Move();
-
-            if (Keyboard.GetState().IsKeyDown(Keys.M) && prevState.IsKeyUp(Keys.M))//(elapsedTime - prevTime >= moveDelay)
-            {
-                //randomBot.Move();
-                ehBot.Move();
-                prevTime = elapsedTime;
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.W) && prevState.IsKeyUp(Keys.W))
-            {
-                testGame.grid = new (int value, bool nEw)[,] {
-                    { (0, false), (0, false), (0, false), (4, false) },
-                    { (0, false), (0, false), (0, false), (2, false) },
-                    { (0, false), (0, false), (0, false), (2, false) },
-                    { (0, false), (0, false), (0, false), (4, false) }
-                };
-
-            }
-
             if (Keyboard.GetState().IsKeyDown(Keys.Up) && prevState.IsKeyUp(Keys.Up))
             {
-                testGame.Move(Direction.Up);
+                inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.UP);  //this no work!!
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Down) && prevState.IsKeyUp(Keys.Down))
             {
-                testGame.Move(Direction.Down);
+                botMan.Move(Direction.Down);
             }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Left) && prevState.IsKeyUp(Keys.Left))
+            {
+                botMan.Move(Direction.Left);
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Right) && prevState.IsKeyUp(Keys.Right))
+            {
+                botMan.Move(Direction.Right);
+            }
+
+            Console.WriteLine(botMan.movementBot.gameOver);
 
             elapsedTime += gameTime.ElapsedGameTime;
 
@@ -157,7 +128,7 @@ namespace _2048_Solver
 
             spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
-          //  spriteBatch.DrawBoard(board);
+            spriteBatch.DrawBoard(botMan.movementBot.board, tile, font, squareColors);
 
             spriteBatch.End();
 
