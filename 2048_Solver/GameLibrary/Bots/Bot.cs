@@ -4,6 +4,8 @@ using sel = OpenQA.Selenium;
 using System.IO;
 using System.Text.RegularExpressions;
 using WindowsInput;
+using OpenQA.Selenium.Chrome;
+using System;
 
 namespace GameLibrary
 {
@@ -23,10 +25,16 @@ namespace GameLibrary
 
             board = new Board(4, 4);
 
-            chromeDriver = new sel.Chrome.ChromeDriver(Directory.GetCurrentDirectory())
+            ChromeOptions options = new ChromeOptions()
+            {
+                PageLoadStrategy = sel.PageLoadStrategy.None
+            };
+
+            chromeDriver = new sel.Chrome.ChromeDriver(Directory.GetCurrentDirectory(), options)
             {
                 Url = "https://play2048.co/"
             };
+
             UpdateBoard();
         }
 
@@ -36,8 +44,15 @@ namespace GameLibrary
         {
             sel.IWebElement element = default;
 
-            element = chromeDriver.FindElement(sel.By.ClassName("tile-container"));
-            
+            try
+            {
+                element = chromeDriver.FindElement(sel.By.ClassName("tile-container"));
+            }
+            catch(Exception ex)
+            {
+                return;
+            }
+
             var children = element.FindElements(sel.By.XPath(".//*"));
 
             List<string> names = new List<string>();

@@ -24,7 +24,7 @@ namespace _2048_Solver
 
         InputSimulator inputSimulator;
 
-        LordOfTheBots botMan;
+        //RIP botMan
 
 
         Texture2D tile;
@@ -44,6 +44,8 @@ namespace _2048_Solver
 
             IsMouseVisible = true;
 
+
+            LordOfTheBots.bigYEET = true;
         }
 
         protected override void Initialize()
@@ -53,8 +55,6 @@ namespace _2048_Solver
             graphics.ApplyChanges();
 
             inputSimulator = new InputSimulator();
-
-            botMan = new LordOfTheBots();
 
             squareColors = new Dictionary<int, Color>();
 
@@ -90,34 +90,22 @@ namespace _2048_Solver
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            KeyboardState ks = Keyboard.GetState();
+
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || ks.IsKeyDown(Keys.Escape))
                 Exit();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Up) && prevState.IsKeyUp(Keys.Up))
+            if (elapsedTime - prevTime >= moveDelay)
             {
-                inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.UP);  //this no work!!
+                LordOfTheBots.MoveStupid();
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Down) && prevState.IsKeyUp(Keys.Down))
-            {
-                botMan.Move(Direction.Down);
-            }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Left) && prevState.IsKeyUp(Keys.Left))
-            {
-                botMan.Move(Direction.Left);
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Right) && prevState.IsKeyUp(Keys.Right))
-            {
-                botMan.Move(Direction.Right);
-            }
-
-            Console.WriteLine(botMan.movementBot.gameOver);
+            Console.WriteLine(LordOfTheBots.stupidBot.gameOver);
 
             elapsedTime += gameTime.ElapsedGameTime;
 
-            prevState = Keyboard.GetState();
+            prevState = ks;
 
             base.Update(gameTime);
         }
@@ -128,7 +116,7 @@ namespace _2048_Solver
 
             spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
-            spriteBatch.DrawBoard(botMan.movementBot.board, tile, font, squareColors);
+            spriteBatch.DrawBoard(LordOfTheBots.stupidBot.board, tile, font, squareColors);
 
             spriteBatch.End();
 

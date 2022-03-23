@@ -14,31 +14,42 @@ namespace GameLibrary
         int ehBotPoints;
     };
 
-    public class LordOfTheBots
+    public static class LordOfTheBots
     {
-        public MovementBot movementBot;
-        public StupidBot stupidBot;
-        public ehBot ehBot;
+        public static MovementBot movementBot;
+        public static StupidBot stupidBot;
+        public static ehBot ehBot;
 
-        public LordOfTheBots()
+        public static bool bigYEET;
+
+        static LordOfTheBots()
         {
+            ehBot = new ehBot();
             movementBot = new MovementBot();
-            //stupidBot = new StupidBot();
-            //ehBot = new ehBot();
+            stupidBot = new StupidBot();
         }
 
-        public TestResult testBots(int numGames)
+        public static TestResult testBots(int numGames)
         {
             TestResult result = new TestResult();
-
-
 
             return result;
         }
 
-        public void Move(Direction direction)
+        public static void Move(Direction direction)
         {
+
             movementBot.Move(direction);
+        }
+
+        public static void MoveStupid()
+        {
+            stupidBot.Move();
+        }
+
+        public static void MoveEh()
+        {
+            ehBot.Move();
         }
     }
 }
