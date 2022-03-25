@@ -28,25 +28,25 @@ namespace GameLibrary
             {
                 case Direction.Up:
                     board.Move(Direction.Up);
-                    inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.UP);
+                    element.SendKeys(OpenQA.Selenium.Keys.ArrowUp);
                     UpdateBoard();
                     break;
 
                 case Direction.Down:
                     board.Move(Direction.Down);
-                    inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.DOWN);
+                    element.SendKeys(OpenQA.Selenium.Keys.ArrowDown);
                     UpdateBoard();
                     break;
 
                 case Direction.Left:
                     board.Move(Direction.Left);
-                    inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.LEFT);
+                    element.SendKeys(OpenQA.Selenium.Keys.ArrowLeft);
                     UpdateBoard();
                     break;
 
                 case Direction.Right:
                     board.Move(Direction.Right);
-                    inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT);
+                    element.SendKeys(OpenQA.Selenium.Keys.Right);
                     UpdateBoard();
                     break;
             }

@@ -45,7 +45,7 @@ namespace _2048_Solver
             IsMouseVisible = true;
 
 
-            LordOfTheBots.bigYEET = true;
+            LordOfTheBots.bigYEET = true;//this sets something in botLord so that it starts existing
         }
 
         protected override void Initialize()
@@ -116,7 +116,7 @@ namespace _2048_Solver
 
             spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
-            spriteBatch.DrawBoard(LordOfTheBots.stupidBot.board, tile, font, squareColors);
+            //spriteBatch.DrawBoard(LordOfTheBots.stupidBot.board, tile, font, squareColors);
 
             spriteBatch.End();
 

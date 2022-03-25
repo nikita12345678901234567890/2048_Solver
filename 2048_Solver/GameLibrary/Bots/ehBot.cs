@@ -51,22 +51,22 @@ namespace GameLibrary
             {
                 case 0:
                     board.Move(Direction.Up);
-                    inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.UP);
+                    element.SendKeys(OpenQA.Selenium.Keys.ArrowUp);
                     break;
 
                 case 1:
                     board.Move(Direction.Down);
-                    inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.DOWN);
+                    element.SendKeys(OpenQA.Selenium.Keys.ArrowDown);
                     break;
 
                 case 2:
                     board.Move(Direction.Left);
-                    inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.LEFT);
+                    element.SendKeys(OpenQA.Selenium.Keys.ArrowLeft);
                     break;
 
                 case 3:
                     board.Move(Direction.Right);
-                    inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT);
+                    element.SendKeys(OpenQA.Selenium.Keys.ArrowRight);
                     break;
             }
 

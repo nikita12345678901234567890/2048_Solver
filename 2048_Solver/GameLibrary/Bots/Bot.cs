@@ -19,6 +19,8 @@ namespace GameLibrary
 
         public bool gameOver = false;
 
+        public int highScore = 0;
+
         public Bot()
         {
             inputSimulator = new InputSimulator();
@@ -42,58 +44,80 @@ namespace GameLibrary
 
         public void UpdateBoard()
         {
-            sel.IWebElement element = default;
-
-            try
-            {
-                element = chromeDriver.FindElement(sel.By.ClassName("tile-container"));
-            }
-            catch(Exception ex)
-            {
-                return;
-            }
-
-            var children = element.FindElements(sel.By.XPath(".//*"));
-
-            List<string> names = new List<string>();
-            List<Match> matches = new List<Match>();
-
-            (int value, bool nEw)[,] tempGrid = new (int value, bool nEw)[board.grid.GetLength(0), board.grid.GetLength(1)];
-
-            for (int i = 0; i < children.Count; i++)
-            {
-                int attempts = 0;
-                while (attempts < 25)
-                {
-                    try
-                    {
-                        names.Add(children[i].GetAttribute("class"));
-                        break;
-                    }
-                    catch (OpenQA.Selenium.StaleElementReferenceException e)
-                    {
-                        children = element.FindElements(sel.By.XPath(".//*"));
-                        names.Clear();
-                    }
-                    attempts++;
-                }
-                var match = Regex.Match(names[i], @"tile tile-(\d+) tile-position-(\d)-(\d)");
-                //If successful, add to list:
-                if (match.Success)
-                {
-                    matches.Add(match);
-
-                    int value = int.Parse(match.Groups[1].Value);
-                    int xPos = int.Parse(match.Groups[2].Value) - 1;
-                    int yPos = int.Parse(match.Groups[3].Value) - 1;
-                    
-                    tempGrid[yPos, xPos] = (value, names[i].Contains("tile-new"));
-                }
-            }
-
-            board.grid = tempGrid;
-
             gameOver = CheckGameOver();
+
+            if (gameOver)
+            {
+                sel.IWebElement element = default;
+
+                try
+                {
+                    element = chromeDriver.FindElement(sel.By.ClassName("game-container"));
+                }
+                catch (Exception ex)
+                {
+                    return;
+                }
+
+                var lower = element.FindElement(sel.By.ClassName("lower"));
+                var button = lower.FindElement(sel.By.ClassName("retry-button"));
+
+                button.Click();
+            }
+
+            else
+            {
+                sel.IWebElement element = default;
+
+                try
+                {
+                    element = chromeDriver.FindElement(sel.By.ClassName("tile-container"));
+                }
+                catch (Exception ex)
+                {
+                    return;
+                }
+
+                var children = element.FindElements(sel.By.XPath(".//*"));
+
+                List<string> names = new List<string>();
+                List<Match> matches = new List<Match>();
+
+                (int value, bool nEw)[,] tempGrid = new (int value, bool nEw)[board.grid.GetLength(0), board.grid.GetLength(1)];
+
+                for (int i = 0; i < children.Count; i++)
+                {
+                    int attempts = 0;
+                    while (attempts < 25)
+                    {
+                        try
+                        {
+                            names.Add(children[i].GetAttribute("class"));
+                            break;
+                        }
+                        catch (OpenQA.Selenium.StaleElementReferenceException e)
+                        {
+                            children = element.FindElements(sel.By.XPath(".//*"));
+                            names.Clear();
+                        }
+                        attempts++;
+                    }
+                    var match = Regex.Match(names[i], @"tile tile-(\d+) tile-position-(\d)-(\d)");
+                    //If successful, add to list:
+                    if (match.Success)
+                    {
+                        matches.Add(match);
+
+                        int value = int.Parse(match.Groups[1].Value);
+                        int xPos = int.Parse(match.Groups[2].Value) - 1;
+                        int yPos = int.Parse(match.Groups[3].Value) - 1;
+
+                        tempGrid[yPos, xPos] = (value, names[i].Contains("tile-new"));
+                    }
+                }
+
+                board.grid = tempGrid;
+            }
         }
 
         public (int value, bool nEw)[,] GetBoard()
@@ -165,38 +189,23 @@ namespace GameLibrary
         {
             sel.IWebElement element = default;
 
-            element = chromeDriver.FindElement(sel.By.ClassName("game-container"));
-
-            var children = element.FindElements(sel.By.XPath(".//*"));
-
-            List<string> names = new List<string>();
-            List<Match> matches = new List<Match>();
-
-            for (int i = 0; i < children.Count; i++)
+            try
             {
-                int attempts = 0;
-                while (attempts < 25)
-                {
-                    try
-                    {
-                        names.Add(children[i].GetAttribute("class"));
-                        break;
-                    }
-                    catch (OpenQA.Selenium.StaleElementReferenceException e)
-                    {
-                        children = element.FindElements(sel.By.XPath(".//*"));
-                        names.Clear();
-                    }
-                    attempts++;
-                }
-                var match = Regex.Match(names[i], @"game-message game-over");
-                //If successful, add to list:
-                if (match.Success)
-                {
-                    matches.Add(match);
+                element = chromeDriver.FindElement(sel.By.ClassName("game-container"));
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
 
-                    return true;
-                }
+            try
+            {
+                var message = chromeDriver.FindElement(sel.By.ClassName("game-message game-over"));
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
 
             return false;
