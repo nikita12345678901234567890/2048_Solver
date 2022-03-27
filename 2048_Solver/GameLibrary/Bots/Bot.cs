@@ -85,9 +85,10 @@ namespace GameLibrary
 
                 (int value, bool nEw)[,] tempGrid = new (int value, bool nEw)[board.grid.GetLength(0), board.grid.GetLength(1)];
 
+                int attempts;
                 for (int i = 0; i < children.Count; i++)
                 {
-                    int attempts = 0;
+                    attempts = 0;
                     while (attempts < 25)
                     {
                         try
@@ -117,6 +118,30 @@ namespace GameLibrary
                 }
 
                 board.grid = tempGrid;
+
+
+                //Getting score:
+                element = default;
+
+                try
+                {
+                    element = chromeDriver.FindElement(sel.By.ClassName("heading"));
+                }
+                catch (Exception ex)
+                {
+                    return;
+                }
+
+                var scores = element.FindElement(sel.By.ClassName("scores-container"));
+                var score = scores.FindElement(sel.By.ClassName("best-container"));
+
+                attempts = 0;
+                string scoreText;
+                int scoreValue = 0;
+                scoreText = score.Text;
+                scoreValue = int.Parse(scoreText);
+
+                if (scoreValue > highScore) highScore = scoreValue;
             }
         }
 
@@ -198,14 +223,19 @@ namespace GameLibrary
                 return false;
             }
 
-            try
+            int attempts = 0;
+            while (attempts < 25)
             {
-                var message = chromeDriver.FindElement(sel.By.ClassName("game-message game-over"));
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
+                try
+                {
+                    var message = chromeDriver.FindElement(sel.By.XPath("//div[@class='game-message game-over']"));
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    
+                }
+                attempts++;
             }
 
             return false;

@@ -35,7 +35,7 @@ namespace _2048_Solver
 
         TimeSpan prevTime = new TimeSpan(0);
         TimeSpan elapsedTime = new TimeSpan(0);
-        TimeSpan moveDelay = TimeSpan.FromMilliseconds(500);
+        TimeSpan moveDelay = TimeSpan.FromMilliseconds(1);
 
         public Game1()
         {
@@ -53,6 +53,8 @@ namespace _2048_Solver
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 800;
             graphics.ApplyChanges();
+            this.IsFixedTimeStep = true;
+            this.TargetElapsedTime = TimeSpan.FromSeconds(1d / 30d); //figure out how to work this
 
             inputSimulator = new InputSimulator();
 
@@ -100,9 +102,6 @@ namespace _2048_Solver
                 LordOfTheBots.MoveStupid();
             }
 
-
-            Console.WriteLine(LordOfTheBots.stupidBot.gameOver);
-
             elapsedTime += gameTime.ElapsedGameTime;
 
             prevState = ks;
@@ -115,6 +114,8 @@ namespace _2048_Solver
             GraphicsDevice.Clear(Color.Chocolate);
 
             spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+
+            spriteBatch.DrawString(font, LordOfTheBots.stupidBot.highScore.ToString(), new Vector2(50, 50), Color.Black);
 
             //spriteBatch.DrawBoard(LordOfTheBots.stupidBot.board, tile, font, squareColors);
 

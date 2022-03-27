@@ -24,8 +24,8 @@ namespace GameLibrary
 
         static LordOfTheBots()
         {
-            ehBot = new ehBot();
-            movementBot = new MovementBot();
+            //ehBot = new ehBot();
+            //movementBot = new MovementBot();
             stupidBot = new StupidBot();
         }
 
