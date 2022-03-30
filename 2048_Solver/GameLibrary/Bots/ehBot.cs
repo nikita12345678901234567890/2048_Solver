@@ -12,8 +12,8 @@ namespace GameLibrary
     {
         Random random = new Random();
 
-        public ehBot()
-            : base()
+        public ehBot(bool connect)
+            : base(connect)
         {
             
 
@@ -50,27 +50,79 @@ namespace GameLibrary
             switch (largest)
             {
                 case 0:
-                    board.Move(Direction.Up);
                     element.SendKeys(OpenQA.Selenium.Keys.ArrowUp);
                     break;
 
                 case 1:
-                    board.Move(Direction.Down);
                     element.SendKeys(OpenQA.Selenium.Keys.ArrowDown);
                     break;
 
                 case 2:
-                    board.Move(Direction.Left);
                     element.SendKeys(OpenQA.Selenium.Keys.ArrowLeft);
                     break;
 
                 case 3:
-                    board.Move(Direction.Right);
                     element.SendKeys(OpenQA.Selenium.Keys.ArrowRight);
                     break;
             }
             
             UpdateBoard();
+        }
+
+        public override void MoveLocal()
+        {
+            Direction move = Direction.Up;
+            int[] points = new int[4];
+
+            for (int i = 0; i < 4; i++)
+            {
+                points[i] = board.TestMoveForPoints(move);
+                move++;
+            }
+
+            int largest = 0;
+            for (int i = 0; i < 4; i++)
+            {
+                if (points[i] > points[largest])
+                {
+                    largest = i;
+                }
+            }
+
+            if (points[largest] == 0)
+            {
+                largest = random.Next(4);
+            }
+
+
+            switch (largest)
+            {
+                case 0:
+                    board.Move(Direction.Up, true);
+                    break;
+
+                case 1:
+                    board.Move(Direction.Down, true);
+                    break;
+
+                case 2:
+                    board.Move(Direction.Left, true);
+                    break;
+
+                case 3:
+                    board.Move(Direction.Right, true);
+                    break;
+            }
+
+            if (board.score > highScore)
+            {
+                highScore = board.score;
+            }
+            if (board.gameOver)
+            {
+                gameNumber++;
+                board.ResetBoard();
+            }
         }
     }
 }

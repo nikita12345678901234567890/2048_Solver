@@ -21,11 +21,21 @@ namespace GameLibrary
 
         public int highScore = 0;
 
-        public Bot()
+        public int gameNumber = 0;
+
+        public Bot(bool connect)
+        {
+            board = new Board(4, 4);
+
+            if (connect)
+            {
+                Connect();
+            }
+        }
+
+        public void Connect()
         {
             inputSimulator = new InputSimulator();
-
-            board = new Board(4, 4);
 
             ChromeOptions options = new ChromeOptions()
             {
@@ -41,6 +51,8 @@ namespace GameLibrary
         }
 
         public abstract void Move();
+
+        public abstract void MoveLocal();
 
         public void UpdateBoard()
         {

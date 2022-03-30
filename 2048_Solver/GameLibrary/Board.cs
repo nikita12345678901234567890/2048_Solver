@@ -28,6 +28,10 @@ namespace GameLibrary
 
         Random random = new Random();
 
+        public int score = 0;
+
+        public bool gameOver = false;
+
         public Board(int gridWidth, int gridHeight)
         {
             grid = new (int value, bool nEw)[gridHeight, gridWidth];
@@ -39,9 +43,28 @@ namespace GameLibrary
                     grid[y, x].value = 0;
                 }
             }
+
+            SpawnTile();
+            SpawnTile();
         }
 
-        public void Move(Direction direction)
+        public void ResetBoard()
+        {
+            for (int y = 0; y < grid.GetLength(0); y++)
+            {
+                for (int x = 0; x < grid.GetLength(1); x++)
+                {
+                    grid[y, x].value = 0;
+                }
+            }
+
+            SpawnTile();
+            SpawnTile();
+
+            score = 0;
+        }
+
+        public void Move(Direction direction, bool spawn)
         {
             //Saving the grid:
             prevGrid = grid;
@@ -97,6 +120,7 @@ namespace GameLibrary
                     if (grid[y, x] == grid[y, x - 1] && grid[y, x].value != 0)
                     {
                         Combine(new Point(x - 1, y), new Point(x, y));
+                        score += grid[y, x - 1].value;
                     }
                 }
             }
@@ -144,7 +168,10 @@ namespace GameLibrary
             }
 
             //Spawn a tile:
-            //SpawnTile();
+            if (spawn)
+            {
+                SpawnTile();
+            }
 
             //Save last move:
             prevMove = direction;
@@ -289,6 +316,7 @@ namespace GameLibrary
 
             if (availableSpaces.Count == 0)
             {
+                gameOver = true;
                 return;
             }
 

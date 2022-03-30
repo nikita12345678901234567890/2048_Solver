@@ -10,8 +10,10 @@ namespace GameLibrary
 {
     public struct TestResult
     {
-        int stupidBotPoints;
-        int ehBotPoints;
+        public int stupidBotHighScore;
+        public int ehBotHighScore;
+        public int stupidBotPoints;
+        public int ehBotPoints;
     };
 
     public static class LordOfTheBots
@@ -22,23 +24,36 @@ namespace GameLibrary
 
         public static bool bigYEET;
 
+
         static LordOfTheBots()
         {
-            //ehBot = new ehBot();
             //movementBot = new MovementBot();
-            stupidBot = new StupidBot();
+            stupidBot = new StupidBot(false);
+            ehBot = new ehBot(false);
         }
 
         public static TestResult testBots(int numGames)
         {
             TestResult result = new TestResult();
 
+            if (stupidBot.gameNumber < numGames)
+            {
+                stupidBot.MoveLocal();
+                result.stupidBotHighScore = stupidBot.highScore;
+                result.ehBotPoints = stupidBot//get current score;
+            }
+
+            if (stupidBot.gameNumber < numGames)
+            {
+                ehBot.MoveLocal();
+                result.ehBotPoints = ehBot.highScore;
+            }
+
             return result;
         }
 
         public static void Move(Direction direction)
         {
-
             movementBot.Move(direction);
         }
 

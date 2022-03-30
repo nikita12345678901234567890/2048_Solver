@@ -9,8 +9,8 @@ namespace GameLibrary
 {
     public class MovementBot : Bot
     {
-        public MovementBot()
-            : base()
+        public MovementBot(bool connect)
+            : base(connect)
         {
             
         }
@@ -27,29 +27,30 @@ namespace GameLibrary
             switch (move)
             {
                 case Direction.Up:
-                    board.Move(Direction.Up);
                     element.SendKeys(OpenQA.Selenium.Keys.ArrowUp);
                     UpdateBoard();
                     break;
 
                 case Direction.Down:
-                    board.Move(Direction.Down);
                     element.SendKeys(OpenQA.Selenium.Keys.ArrowDown);
                     UpdateBoard();
                     break;
 
                 case Direction.Left:
-                    board.Move(Direction.Left);
                     element.SendKeys(OpenQA.Selenium.Keys.ArrowLeft);
                     UpdateBoard();
                     break;
 
                 case Direction.Right:
-                    board.Move(Direction.Right);
                     element.SendKeys(OpenQA.Selenium.Keys.Right);
                     UpdateBoard();
                     break;
             }
+        }
+
+        public override void MoveLocal()
+        { 
+            //bigYEET
         }
     }
 }

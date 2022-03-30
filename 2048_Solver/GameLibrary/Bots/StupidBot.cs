@@ -10,12 +10,10 @@ namespace GameLibrary
 {
     public class StupidBot : Bot
     {
-
-
         Random random = new Random();
 
-        public StupidBot()
-            : base()
+        public StupidBot(bool connect)
+            : base(connect)
         {
             
         }
@@ -28,27 +26,56 @@ namespace GameLibrary
             switch (fish)
             {
                 case 0:
-                    board.Move(Direction.Up);
                     element.SendKeys(OpenQA.Selenium.Keys.ArrowUp);
                     break;
 
                 case 1:
-                    board.Move(Direction.Down);
                     element.SendKeys(OpenQA.Selenium.Keys.ArrowDown);
                     break;
 
                 case 2:
-                    board.Move(Direction.Left);
                     element.SendKeys(OpenQA.Selenium.Keys.ArrowLeft);
                     break;
 
                 case 3:
-                    board.Move(Direction.Right);
                     element.SendKeys(OpenQA.Selenium.Keys.ArrowRight);
                     break;
             }
 
             UpdateBoard();
+        }
+
+        public override void MoveLocal()
+        {
+            int fish = random.Next(4);
+            switch (fish)
+            {
+                case 0:
+                    board.Move(Direction.Up, true);
+                    break;
+
+                case 1:
+                    board.Move(Direction.Down, true);
+                    break;
+                    kji,
+                case 2:
+                    board.Move(Direction.Left, true);
+                    break;
+
+                case 3:
+                    board.Move(Direction.Right, true);
+                    break;
+            }
+
+            if (board.score > highScore)
+            {
+                highScore = board.score;
+            }
+            if (board.gameOver)
+            {
+                gameNumber++;
+                board.ResetBoard();
+            }
         }
     }
 }

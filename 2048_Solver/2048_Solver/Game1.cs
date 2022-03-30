@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System;
 using WindowsInput;
+using System.Diagnostics;
 
 namespace _2048_Solver
 {
@@ -37,6 +38,9 @@ namespace _2048_Solver
         TimeSpan elapsedTime = new TimeSpan(0);
         TimeSpan moveDelay = TimeSpan.FromMilliseconds(1);
 
+        TestResult status;
+
+        Stopwatch updateTimer = new Stopwatch();
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -44,6 +48,7 @@ namespace _2048_Solver
 
             IsMouseVisible = true;
 
+       //     this.TargetElapsedTime = TimeSpan.FromSeconds(1d / 30d); //figure out how to work this
 
             LordOfTheBots.bigYEET = true;//this sets something in botLord so that it starts existing
         }
@@ -53,8 +58,9 @@ namespace _2048_Solver
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 800;
             graphics.ApplyChanges();
-            this.IsFixedTimeStep = true;
-            this.TargetElapsedTime = TimeSpan.FromSeconds(1d / 30d); //figure out how to work this
+            
+            //this.IsFixedTimeStep = true;
+            
 
             inputSimulator = new InputSimulator();
 
@@ -83,12 +89,16 @@ namespace _2048_Solver
 
             tile = Content.Load<Texture2D>("Tile");
             font = Content.Load<SpriteFont>("Font");
+
+            updateTimer.Start();
         }
 
         protected override void UnloadContent()
         {
 
         }
+
+        float minimumDelayMilliseconds = 250;
 
         protected override void Update(GameTime gameTime)
         {
@@ -97,14 +107,17 @@ namespace _2048_Solver
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || ks.IsKeyDown(Keys.Escape))
                 Exit();
 
+            if (updateTimer.ElapsedMilliseconds < minimumDelayMilliseconds) return;
+            
             if (elapsedTime - prevTime >= moveDelay)
             {
-                LordOfTheBots.MoveStupid();
+                status = LordOfTheBots.testBots(100);
             }
 
             elapsedTime += gameTime.ElapsedGameTime;
 
             prevState = ks;
+            updateTimer.Restart();
 
             base.Update(gameTime);
         }
@@ -115,7 +128,8 @@ namespace _2048_Solver
 
             spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
-            spriteBatch.DrawString(font, LordOfTheBots.stupidBot.highScore.ToString(), new Vector2(50, 50), Color.Black);
+            spriteBatch.DrawString(font, "Stupid: " + status.stupidBotPoints.ToString(), new Vector2(50, 50), Color.Black);
+            spriteBatch.DrawString(font, "Eh: " + status.ehBotPoints.ToString(), new Vector2(50, 250), Color.Black);
 
             //spriteBatch.DrawBoard(LordOfTheBots.stupidBot.board, tile, font, squareColors);
 
