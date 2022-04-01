@@ -17,11 +17,12 @@ namespace GameLibrary
 
         public Board board;
 
-        public bool gameOver = false;
+        public bool gameOver => board.gameOver;
 
         public int highScore = 0;
 
         public int gameNumber = 0;
+        public int score => board.score;
 
         public Bot(bool connect)
         {
@@ -56,7 +57,7 @@ namespace GameLibrary
 
         public void UpdateBoard()
         {
-            gameOver = CheckGameOver();
+            board.gameOver = CheckGameOver();
 
             if (gameOver)
             {

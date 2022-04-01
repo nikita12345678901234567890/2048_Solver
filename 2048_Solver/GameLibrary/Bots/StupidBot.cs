@@ -57,7 +57,6 @@ namespace GameLibrary
                 case 1:
                     board.Move(Direction.Down, true);
                     break;
-                    kji,
                 case 2:
                     board.Move(Direction.Left, true);
                     break;

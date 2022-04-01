@@ -128,10 +128,23 @@ namespace _2048_Solver
 
             spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
-            spriteBatch.DrawString(font, "Stupid: " + status.stupidBotPoints.ToString(), new Vector2(50, 50), Color.Black);
-            spriteBatch.DrawString(font, "Eh: " + status.ehBotPoints.ToString(), new Vector2(50, 250), Color.Black);
+            spriteBatch.DrawString(font, "Highscore      Current score    Game#", new Vector2(150, 0), Color.Black);
 
-            //spriteBatch.DrawBoard(LordOfTheBots.stupidBot.board, tile, font, squareColors);
+            spriteBatch.DrawString(font, "Stupid:", new Vector2(140 - font.MeasureString("Stupid:").X, 50), Color.Black);
+            spriteBatch.DrawString(font, status.stupidBotHighScore.ToString(), new Vector2(250, 50), Color.Black);
+            spriteBatch.DrawString(font, status.stupidBotPoints.ToString(), new Vector2(550, 50), Color.Black);
+            spriteBatch.DrawString(font, LordOfTheBots.stupidBot.gameNumber.ToString(), new Vector2(750, 50), Color.Black);
+
+            spriteBatch.DrawString(font, "Eh:", new Vector2(140 - font.MeasureString("Eh:").X, 100), Color.Black);
+            spriteBatch.DrawString(font, status.ehBotHighScore.ToString(), new Vector2(250, 100), Color.Black);
+            spriteBatch.DrawString(font, status.ehBotPoints.ToString(), new Vector2(550, 100), Color.Black);
+            spriteBatch.DrawString(font, LordOfTheBots.ehBot.gameNumber.ToString(), new Vector2(750, 100), Color.Black);
+
+            spriteBatch.DrawString(font, "Stupid bot:", new Vector2(0, 400), Color.Black);
+            spriteBatch.DrawString(font, "Eh bot:", new Vector2(443, 400), Color.Black);
+
+            spriteBatch.DrawBoard(LordOfTheBots.stupidBot.board, tile, font, squareColors, 0.45, new Vector2(0, 443));
+            spriteBatch.DrawBoard(LordOfTheBots.ehBot.board, tile, font, squareColors, 0.45, new Vector2(443, 443));
 
             spriteBatch.End();
 

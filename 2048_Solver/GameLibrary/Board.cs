@@ -62,6 +62,8 @@ namespace GameLibrary
             SpawnTile();
 
             score = 0;
+
+            gameOver = false;
         }
 
         public void Move(Direction direction, bool spawn)
